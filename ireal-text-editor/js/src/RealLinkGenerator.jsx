@@ -36,7 +36,7 @@ class RealLinkGenerator extends React.Component {
     const href = this.encodeLink();
     return (
       <div>
-        {href !== "" ? <a href={href}>import</a> : <span>Nothing to show</span>}
+        {href !== "" ? <a href={href}>iReal songs</a> : <span>Nothing to show</span>}
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import { TextField, RaisedButton } from "material-ui";
 
 class ChordEditBox extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class ChordEditBox extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ text: event.target.value.replace(" ", "_") });
+    this.setState({ text: event.target.value.replace(" ", ".") });
   }
 
   handleSubmit() {
@@ -35,19 +36,34 @@ class ChordEditBox extends React.Component {
   }
 
   render() {
+    const style = {
+      margin: 12
+    };
+    const textFieldSytle = {
+      fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+    }
+
     return (
       <div>
         <div>
-          <textarea
-            cols="40"
-            rows="5"
+          <TextField
+            id="chords"
+            multiLine={true}
+            rows={2}
+            rowsMax={5}
             value={this.state.text}
             onChange={this.handleChange}
+            style={textFieldSytle}
+            fullWidth={true}
           />
         </div>
         <div>
-          <button onClick={this.handleSubmit}>submit</button>
-          <button onClick={this.clearText}>clear</button>
+          <RaisedButton
+            onClick={this.handleSubmit}
+            style={style}
+            label="generate link"
+          />
+          <RaisedButton onClick={this.clearText} style={style} label="clear" />
         </div>
       </div>
     );

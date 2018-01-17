@@ -2,11 +2,16 @@ import React from "react";
 import { render } from "react-dom";
 import { ChordEditBox } from "./ChordEditBox";
 import { RealLinkGenerator as LinkGenerator } from "./RealLinkGenerator";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const styles = {
   fontFamily: "sans-serif",
   textAlign: "center"
 };
+
+const linkContainerStyle = {
+  margintop: "18px"
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -24,10 +29,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={styles}>
-        <ChordEditBox onSubmit={this.handleSongChange} song={this.state.song} />
-        <LinkGenerator song={this.state.song} />
-      </div>
+      <MuiThemeProvider>
+        <div style={styles}>
+          <ChordEditBox onSubmit={this.handleSongChange} song={this.state.song} />
+          <div style={linkContainerStyle}>
+            <LinkGenerator song={this.state.song} />
+          </div>
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
