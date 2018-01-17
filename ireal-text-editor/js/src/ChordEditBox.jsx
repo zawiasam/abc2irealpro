@@ -48,9 +48,10 @@ class ChordEditBox extends React.Component {
         <div>
           <TextField
             id="chords"
+            floatingLabelText="Chords"
             multiLine={true}
             rows={2}
-            rowsMax={5}
+            rowsMax={10}
             value={this.state.text}
             onChange={this.handleChange}
             style={textFieldSytle}
