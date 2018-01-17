@@ -18454,7 +18454,7 @@ var RealLinkGenerator = function (_React$Component) {
     value: function encodeLink() {
       var songInfo = Object.assign({}, propsy, this.props);
       var header = String(songInfo.title) + "=" + String(songInfo.composer) + "=" + String(songInfo.style) + "=" + String(songInfo.keySignature) + "=" + String(songInfo.transpostion) + "=[T" + String(songInfo.timing.replace("/", ""));
-      var body = (songInfo.song || "").replace(/\|+$/, "") + "Z ".replace(".", " ");
+      var body = (songInfo.song || "").replace(".", " ").replace(/\|+$/, "") + "Z ";
 
       if (songInfo.song.length > 0) {
         return "irealbook://" + encodeURIComponent(header + body);
