@@ -18,9 +18,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build":
-      "node node_modules/webpack/bin/webpack.js --config=js/scripts/webpack.config.js",
+      "node node_modules/webpack/bin/webpack.js --config=abc2ireal/js/scripts/webpack.config.js",
     "build:watch":
-      "node node_modules/webpack/bin/webpack.js --config=js/scripts/webpack.config.js -w"
+      "node node_modules/webpack/bin/webpack.js --config=abc2ireal/js/scripts/webpack.config.js -w"
   },
   "repository": {
     "type": "git",
