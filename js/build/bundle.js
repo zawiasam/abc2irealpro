@@ -972,7 +972,7 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      song: ""
+      song: "....|....|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb7...|....|F.G-.|.F,Bb.|..Eb7.|....|..G-.|..Bb.|..Eb.|....|F.G-.|...Bb|....|Eb...|..Bb.|Eb..F|G-...|F...|Bb...|Eb...|F.G-.|Dsus4...|D...|Eb..F|G-...|F...|Bb...|Eb..F|G-...|Eb...|....|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-...|Bb...|Eb7...|...F|.G-.F|.Bb..|.Eb7..|....|G-.F.|Bb...|....|....|"
     };
     _this.handleSongChange = _this.handleSongChange.bind(_this);
     return _this;
@@ -989,7 +989,7 @@ var App = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { style: styles },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ChordEditBox__["a" /* ChordEditBox */], { onSubmit: this.handleSongChange }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ChordEditBox__["a" /* ChordEditBox */], { onSubmit: this.handleSongChange, song: this.state.song }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__RealLinkGenerator__["a" /* RealLinkGenerator */], { song: this.state.song })
       );
     }
@@ -18334,19 +18334,24 @@ var ChordEditBox = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (ChordEditBox.__proto__ || Object.getPrototypeOf(ChordEditBox)).call(this, props));
 
-    _this.state = { text: "" };
+    _this.state = {
+      text: _this.props.song || ""
+    };
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.clearText = _this.clearText.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
     return _this;
   }
 
   _createClass(ChordEditBox, [{
     key: "clearText",
     value: function clearText() {
+      var emptySong = "";
       this.setState({
-        text: ""
+        text: emptySong
       });
+      this.onSubmit(emptySong);
     }
   }, {
     key: "handleChange",
@@ -18356,8 +18361,13 @@ var ChordEditBox = function (_React$Component) {
   }, {
     key: "handleSubmit",
     value: function handleSubmit() {
+      this.onSubmit(this.state.text);
+    }
+  }, {
+    key: "onSubmit",
+    value: function onSubmit(text) {
       if (this.props.onSubmit) {
-        this.props.onSubmit(this.state.text);
+        this.props.onSubmit(text);
       }
     }
   }, {
@@ -18444,20 +18454,29 @@ var RealLinkGenerator = function (_React$Component) {
     value: function encodeLink() {
       var songInfo = Object.assign({}, propsy, this.props);
       var header = String(songInfo.title) + "=" + String(songInfo.composer) + "=" + String(songInfo.style) + "=" + String(songInfo.keySignature) + "=" + String(songInfo.transpostion) + "=[T" + String(songInfo.timing.replace("/", ""));
-      var body = (this.props.song || "").replace(/\|+$/, "") + "Z ".replace(".", " ");
+      var body = (songInfo.song || "").replace(/\|+$/, "") + "Z ".replace(".", " ");
 
-      return "irealbook://" + encodeURIComponent(header + body);
+      if (songInfo.song.length > 0) {
+        return "irealbook://" + encodeURIComponent(header + body);
+      } else {
+        return "";
+      }
     }
   }, {
     key: "render",
     value: function render() {
+      var href = this.encodeLink();
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        href !== "" ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "a",
-          { href: this.encodeLink() },
+          { href: href },
           "import"
+        ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "span",
+          null,
+          "Nothing to show"
         )
       );
     }

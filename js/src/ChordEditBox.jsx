@@ -3,16 +3,21 @@ import React from "react";
 class ChordEditBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "" };
+    this.state = {
+      text: this.props.song || ""
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearText = this.clearText.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   clearText() {
+    const emptySong = "";
     this.setState({
-      text: ""
+      text: emptySong
     });
+    this.onSubmit(emptySong);
   }
 
   handleChange(event) {
@@ -20,8 +25,12 @@ class ChordEditBox extends React.Component {
   }
 
   handleSubmit() {
+    this.onSubmit(this.state.text);
+  }
+
+  onSubmit(text) {
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.text);
+      this.props.onSubmit(text);
     }
   }
 

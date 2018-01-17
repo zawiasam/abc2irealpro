@@ -23,15 +23,20 @@ class RealLinkGenerator extends React.Component {
       songInfo.keySignature
     }=${songInfo.transpostion}=[T${songInfo.timing.replace("/", "")}`;
     let body =
-      (this.props.song || "").replace(/\|+$/, "") + "Z ".replace(".", " ");
+      (songInfo.song || "").replace(/\|+$/, "") + "Z ".replace(".", " ");
 
-    return "irealbook://" + encodeURIComponent(header + body);
+    if (songInfo.song.length > 0) {
+      return "irealbook://" + encodeURIComponent(header + body);
+    } else {
+      return "";
+    }
   }
 
   render() {
+    const href = this.encodeLink();
     return (
       <div>
-        <a href={this.encodeLink()}>import</a>
+        {href !== "" ? <a href={href}>import</a> : <span>Nothing to show</span>}
       </div>
     );
   }
