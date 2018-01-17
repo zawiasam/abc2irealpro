@@ -5,28 +5,47 @@ class ChordEditBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: this.props.song || ""
+      chordsText: this.props.song || ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePretify = this.handlePretify.bind(this);
     this.clearText = this.clearText.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    
   }
 
   clearText() {
     const emptySong = "";
     this.setState({
-      text: emptySong
+      chordsText: emptySong
     });
     this.onSubmit(emptySong);
   }
 
+  formatValue(item) {
+    return item
+      .replace(" ", ".")
+      .replace(/\n/g, "")
+      .replace(/\r/g, "")
+      .replace(/([^\|]+\|[^\|]+\|[^\|]+\|[^\|]+\|)/g, (match, p1) => {
+        return match + "\n\r";
+      });
+  }
+
+  handlePretify() {
+    const valueFormatted = this.formatValue(this.state.chordsText);
+    this.setState({ chordsText: valueFormatted });
+  }
+
   handleChange(event) {
-    this.setState({ text: event.target.value.replace(" ", ".") });
+    const value = event.target.value;
+
+    this.setState({ chordsText: value });
   }
 
   handleSubmit() {
-    this.onSubmit(this.state.text);
+    this.onSubmit(this.state.chordsText);
   }
 
   onSubmit(text) {
@@ -40,8 +59,9 @@ class ChordEditBox extends React.Component {
       margin: 12
     };
     const textFieldSytle = {
-      fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
-    }
+      fontFamily:
+        '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+    };
 
     return (
       <div>
@@ -52,13 +72,18 @@ class ChordEditBox extends React.Component {
             multiLine={true}
             rows={2}
             rowsMax={10}
-            value={this.state.text}
+            value={this.state.chordsText}
             onChange={this.handleChange}
             style={textFieldSytle}
             fullWidth={true}
           />
         </div>
         <div>
+          <RaisedButton
+            onClick={this.handlePretify}
+            style={style}
+            label="pretify"
+          />
           <RaisedButton
             onClick={this.handleSubmit}
             style={style}

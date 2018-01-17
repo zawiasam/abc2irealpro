@@ -7,7 +7,7 @@ import { TextField } from "material-ui";
 
 const styles = {
   textAlign: "center",
-  display:"flex"
+  display: "flex"
 };
 
 const linkContainerStyle = {
@@ -38,7 +38,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider>
         <div style={styles}>
-          <div style={{display: "block"}}>
+          <div style={{ display: "block" }}>
             <TextField
               defaultValue={this.state.composer}
               floatingLabelText="Composer"
@@ -53,20 +53,29 @@ class App extends React.Component {
               onChange={event => this.setState({ title: event.target.value })}
             />
             <br />
-            <TextField defaultValue={this.state.style} floatingLabelText="Style" />
+            <TextField
+              defaultValue={this.state.style}
+              floatingLabelText="Style"
+            />
             <br />
-            <TextField defaultValue={this.state.timing} floatingLabelText="Timing" />
+            <TextField
+              defaultValue={this.state.timing}
+              floatingLabelText="Timing"
+            />
             <br />
             <TextField
               defaultValue={this.state.keySignature}
               floatingLabelText="Key signature"
             />
           </div>
-          <div style={{width: "100%"}}>
+          <div style={{ width: "100%" }}>
             <ChordEditBox
               onSubmit={this.handleSongChange}
               song={this.state.song}
             />
+            <pre>x - repeat one prev. chord</pre>
+            <pre>% - repeat two prev. chords</pre>
+            <pre>n - N.C.</pre>
             <div style={linkContainerStyle}>
               <LinkGenerator songInfo={this.state} />
             </div>

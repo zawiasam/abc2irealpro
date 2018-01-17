@@ -14993,9 +14993,15 @@ var App = function (_React$Component) {
               }.bind(this)
             }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_material_ui__["b" /* TextField */], { defaultValue: this.state.style, floatingLabelText: "Style" }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_material_ui__["b" /* TextField */], {
+              defaultValue: this.state.style,
+              floatingLabelText: "Style"
+            }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_material_ui__["b" /* TextField */], { defaultValue: this.state.timing, floatingLabelText: "Timing" }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_material_ui__["b" /* TextField */], {
+              defaultValue: this.state.timing,
+              floatingLabelText: "Timing"
+            }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_material_ui__["b" /* TextField */], {
               defaultValue: this.state.keySignature,
@@ -15009,6 +15015,21 @@ var App = function (_React$Component) {
               onSubmit: this.handleSongChange,
               song: this.state.song
             }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "pre",
+              null,
+              "x - repeat one prev. chord"
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "pre",
+              null,
+              "% - repeat two prev. chords"
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "pre",
+              null,
+              "n - N.C."
+            ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { style: linkContainerStyle },
@@ -32279,6 +32300,8 @@ module.exports = camelize;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_material_ui__ = __webpack_require__(103);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { throw new TypeError("Cannot instantiate an arrow function"); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -32297,12 +32320,14 @@ var ChordEditBox = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (ChordEditBox.__proto__ || Object.getPrototypeOf(ChordEditBox)).call(this, props));
 
     _this.state = {
-      text: _this.props.song || ""
+      chordsText: _this.props.song || ""
     };
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handlePretify = _this.handlePretify.bind(_this);
     _this.clearText = _this.clearText.bind(_this);
     _this.onSubmit = _this.onSubmit.bind(_this);
+
     return _this;
   }
 
@@ -32311,19 +32336,38 @@ var ChordEditBox = function (_React$Component) {
     value: function clearText() {
       var emptySong = "";
       this.setState({
-        text: emptySong
+        chordsText: emptySong
       });
       this.onSubmit(emptySong);
     }
   }, {
+    key: "formatValue",
+    value: function formatValue(item) {
+      var _this2 = this;
+
+      return item.replace(" ", ".").replace(/\n/g, "").replace(/\r/g, "").replace(/([^\|]+\|[^\|]+\|[^\|]+\|[^\|]+\|)/g, function (match, p1) {
+        _newArrowCheck(this, _this2);
+
+        return match + "\n\r";
+      }.bind(this));
+    }
+  }, {
+    key: "handlePretify",
+    value: function handlePretify() {
+      var valueFormatted = this.formatValue(this.state.chordsText);
+      this.setState({ chordsText: valueFormatted });
+    }
+  }, {
     key: "handleChange",
     value: function handleChange(event) {
-      this.setState({ text: event.target.value.replace(" ", ".") });
+      var value = event.target.value;
+
+      this.setState({ chordsText: value });
     }
   }, {
     key: "handleSubmit",
     value: function handleSubmit() {
-      this.onSubmit(this.state.text);
+      this.onSubmit(this.state.chordsText);
     }
   }, {
     key: "onSubmit",
@@ -32354,7 +32398,7 @@ var ChordEditBox = function (_React$Component) {
             multiLine: true,
             rows: 2,
             rowsMax: 10,
-            value: this.state.text,
+            value: this.state.chordsText,
             onChange: this.handleChange,
             style: textFieldSytle,
             fullWidth: true
@@ -32363,6 +32407,11 @@ var ChordEditBox = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
           null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_material_ui__["a" /* RaisedButton */], {
+            onClick: this.handlePretify,
+            style: style,
+            label: "pretify"
+          }),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_material_ui__["a" /* RaisedButton */], {
             onClick: this.handleSubmit,
             style: style,
@@ -59770,7 +59819,7 @@ var RealLinkGenerator = function (_React$Component) {
     value: function encodeLink() {
       var songInfo = Object.assign({}, propsy.songInfo, this.props.songInfo);
       var header = String(songInfo.title) + "=" + String(songInfo.composer) + "=" + String(songInfo.style) + "=" + String(songInfo.keySignature) + "=" + String(songInfo.transpostion) + "=[T" + String(songInfo.timing.replace("/", ""));
-      var body = (songInfo.song || "").replace(/\./g, " ").replace(/\|+$/, "") + "Z ";
+      var body = (songInfo.song || "").replace(/\./g, " ").replace(/\|+$/, "").replace(/\n/g, "").replace(/\r/g, "") + "Z ";
 
       if (songInfo.song.length > 0) {
         return "irealbook://" + encodeURIComponent(header + body);
