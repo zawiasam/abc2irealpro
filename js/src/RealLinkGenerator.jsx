@@ -23,7 +23,7 @@ class RealLinkGenerator extends React.Component {
       songInfo.keySignature
     }=${songInfo.transpostion}=[T${songInfo.timing.replace("/", "")}`;
     let body =
-      (songInfo.song || "").replace(".", " ").replace(/\|+$/, "") + "Z ";
+      (songInfo.song || "").replace(/\./g, " ").replace(/\|+$/, "") + "Z ";
 
     if (songInfo.song.length > 0) {
       return "irealbook://" + encodeURIComponent(header + body);
