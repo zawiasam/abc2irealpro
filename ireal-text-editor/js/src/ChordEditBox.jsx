@@ -81,12 +81,12 @@ class ChordEditBox extends React.Component {
           <RaisedButton
             onClick={this.handlePretify}
             style={style}
-            label="pretify"
+            label="pretify a little"
           />
           <RaisedButton
             onClick={this.handleSubmit}
             style={style}
-            label="generate link"
+            label="generate song"
           />
           <RaisedButton onClick={this.clearText} style={style} label="clear" />
         </div>
