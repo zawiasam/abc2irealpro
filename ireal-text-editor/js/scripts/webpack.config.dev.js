@@ -6,9 +6,11 @@ const appOut = path.resolve(jsRoot, "build");
 const public = path.resolve(jsRoot, "..");
 
 var config = {
+  devtool: 'cheap-module-eval-source-map',
   entry: appSrc + "/index.jsx",
   output: {
     path: appOut,
+    publicPath: '/js/build/',
     filename: "bundle.js"
   },
   module: {
@@ -26,16 +28,12 @@ var config = {
   },
   devServer: {
     contentBase: public, // boolean | string | array, static file location
+    hot: true,
     compress: true, // enable gzip compression
-    historyApiFallback: true, // true for index.html upon 404, object for multiple paths
-    hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
-    https: false, // true for self-signed, object for cert authority
-    noInfo: true, // only errors & warns on hot reload
-    // ...
   },
-  plugins: [new webpack.HotModuleReplacementPlugin({
-    // Options...
-  })]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
 };
 
 module.exports = config;
