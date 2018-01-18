@@ -9,7 +9,7 @@ class ChordEditBox extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePretify = this.handlePrettify.bind(this);
+    this.handlePrettify = this.handlePrettify.bind(this);
     this.clearText = this.clearText.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -28,7 +28,7 @@ class ChordEditBox extends React.Component {
       .replace(/\n/g, "")
       .replace(/\r/g, "")
       .replace(/([^\|]+\|[^\|]+\|[^\|]+\|[^\|]+\|)/g, (match, p1) => {
-        return match + "\n";
+        return match + "\nx";
       });
   }
 
