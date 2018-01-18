@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack")
 
 const jsRoot = path.resolve(__dirname, "..");
 const appSrc = path.resolve(jsRoot, "src");
@@ -22,7 +23,16 @@ var config = {
   resolve: {
     modules: [process.env.NODE_PATH || "node_modules"],
     extensions: [".js", ".jsx"]
-  }
+  },
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM"
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true
+    })
+  ]
 };
 
 module.exports = config;
