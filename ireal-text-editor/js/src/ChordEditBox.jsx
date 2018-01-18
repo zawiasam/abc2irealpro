@@ -9,7 +9,7 @@ class ChordEditBox extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePretify = this.handlePretify.bind(this);
+    this.handlePretify = this.handlePrettify.bind(this);
     this.clearText = this.clearText.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -32,7 +32,7 @@ class ChordEditBox extends React.Component {
       });
   }
 
-  handlePretify() {
+  handlePrettify() {
     const valueFormatted = this.formatValue(this.state.chordsText);
     this.setState({ chordsText: valueFormatted });
   }
@@ -79,9 +79,9 @@ class ChordEditBox extends React.Component {
         </div>
         <div>
           <RaisedButton
-            onClick={this.handlePretify}
+            onClick={this.handlePrettify}
             style={style}
-            label="pretify a little"
+            label="prettify a little"
           />
           <RaisedButton
             onClick={this.handleSubmit}
