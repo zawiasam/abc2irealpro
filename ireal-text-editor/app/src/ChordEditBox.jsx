@@ -28,7 +28,7 @@ class ChordEditBox extends React.Component {
       .replace(/\n/g, "")
       .replace(/\r/g, "")
       .replace(/([^\|]+\|[^\|]+\|[^\|]+\|[^\|]+\|)/g, (match, p1) => {
-        return match + "\nx";
+        return match + "\n";
       });
   }
 
