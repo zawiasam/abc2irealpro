@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { ChordEditBox } from "./ChordEditBox";
-import { RealLinkGenerator as LinkGenerator } from "./RealLinkGenerator";
+import { SongInfo } from "./SongInfo";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { TextField } from "material-ui";
 
@@ -23,52 +23,63 @@ class App extends React.Component {
       style: "Medium Swing",
       keySignature: "C",
       transpostion: "n",
-      timing: "4/4",
+      measure: "4/4",
       song:
-        "....|....|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb7...|....|F.G-.|.F,Bb.|..Eb7.|....|..G-.|..Bb.|..Eb.|....|F.G-.|...Bb|....|Eb...|..Bb.|Eb..F|G-...|F...|Bb...|Eb...|F.G-.|Dsus4...|D...|Eb..F|G-...|F...|Bb...|Eb..F|G-...|Eb...|....|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-...|Bb...|Eb7...|...F|.G-.F|.Bb..|.Eb7..|....|G-.F.|Bb...|....|....|",
-      openLink: false
+        "....|....|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb7...|....|F.G-.|.F,Bb.|..Eb7.|....|..G-.|..Bb.|..Eb.|....|F.G-.|...Bb|....|Eb...|..Bb.|Eb..F|G-...|F...|Bb...|Eb...|F.G-.|Dsus4...|D...|Eb..F|G-...|F...|Bb...|Eb..F|G-...|Eb...|....|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-...|Bb...|Eb7...|...F|.G-.F|.Bb..|.Eb7..|....|G-.F.|Bb...|....|....|"
     };
     this.handleSongChange = this.handleSongChange.bind(this);
+    this.handleSongInfoChange = this.handleSongInfoChange.bind(this);
+    this.encodeLink = this.encodeLink.bind(this);
+  }
+
+  handleSongInfoChange(songInfo) {
+    this.setState(songInfo);
+  }
+
+  encodeLink(songInfo) {
+    let header = [
+      songInfo.title,
+      songInfo.composer,
+      songInfo.style,
+      songInfo.key,
+      songInfo.transpostion,
+      `[T${songInfo.measure.replace("/", "")}`
+    ].join("=");
+
+    let body =
+      (songInfo.song || "")
+        .replace(/\./g, " ")
+        .replace(/\|+$/, "")
+        .replace(/\n/g, "")
+        .replace(/\r/g, "") + "Z ";
+
+    if (songInfo.song.length > 0) {
+      return "irealbook://" + encodeURIComponent(header + body);
+    } else {
+      return "";
+    }
   }
 
   handleSongChange(text) {
-    this.setState({ song: text, openLink: true });
+    const url = this.encodeLink(this.state);
+    url && window.open(url, "_blank");
   }
 
   render() {
     return (
       <MuiThemeProvider>
         <div style={styles}>
-          <div style={{ display: "block" }}>
-            <TextField
-              defaultValue={this.state.composer}
-              floatingLabelText="Composer"
-              onChange={event =>
-                this.setState({ composer: event.target.value })
-              }
-            />
-            <br />
-            <TextField
-              defaultValue={this.state.title}
-              floatingLabelText="Title"
-              onChange={event => this.setState({ title: event.target.value })}
-            />
-            <br />
-            <TextField
-              defaultValue={this.state.style}
-              floatingLabelText="Style"
-            />
-            <br />
-            <TextField
-              defaultValue={this.state.timing}
-              floatingLabelText="Timing"
-            />
-            <br />
-            <TextField
-              defaultValue={this.state.keySignature}
-              floatingLabelText="Key signature"
-            />
-          </div>
+          <SongInfo
+            defaultValue={{
+              title: "My song",
+              composer: "Unknown Composer",
+              style: "Medium Swing",
+              key: "C",
+              transpostion: "n",
+              measure: "4/4"
+            }}
+            onChange={this.handleSongInfoChange}
+          />
           <div style={{ width: "100%" }}>
             <ChordEditBox
               onSubmit={this.handleSongChange}
@@ -77,12 +88,6 @@ class App extends React.Component {
             <pre>x - repeat one prev. chord</pre>
             <pre>% - repeat two prev. chords</pre>
             <pre>n - N.C.</pre>
-            <LinkGenerator songInfo={this.state}>
-              {url => {
-                this.state.openLink && url && window.open(url, "_blank");
-                return null;
-              }}
-            </LinkGenerator>
           </div>
         </div>
       </MuiThemeProvider>
