@@ -67,7 +67,7 @@ var config = {
       }
     }),
     new HtmlWebpackPlugin({
-      template: path.join(paths.appSrcRoot, "app/templates/index.html"),
+      template: path.join(paths.appSrcRoot, "app/templates/index.ejs"),
       filename: path.join(paths.appSrcRoot, "index.html"),
       excludeChunks: ["base"],
       minify: {

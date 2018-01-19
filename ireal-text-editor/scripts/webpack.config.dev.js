@@ -40,7 +40,7 @@ var config = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(paths.appSrcRoot, "app/templates/index.html")
+      template: path.join(paths.appSrcRoot, "app/templates/index.ejs")
     })
   ]
 };

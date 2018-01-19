@@ -8,6 +8,7 @@
             font-family: 'Roboto', sans-serif;
         }
     </style>
+    <% if (process.env.NODE_ENV === "production") { %>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112672250-1"></script>
     <script>
@@ -17,7 +18,7 @@
 
         gtag('config', 'UA-112672250-1');
     </script>
-
+    <% } %>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
@@ -27,7 +28,7 @@
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyDuFMhGDCnLynLD-HLg5gzDY1x1-KZpssg",
-            authDomain: "ireal-text-editor.firebaseapp.com",
+            authDomain: "localhost",
             databaseURL: "https://ireal-text-editor.firebaseio.com",
             projectId: "ireal-text-editor",
             storageBucket: "ireal-text-editor.appspot.com",
