@@ -19,7 +19,6 @@ class ChordEditBox extends React.Component {
     this.setState({
       chordsText: emptySong
     });
-    this.onSubmit(emptySong);
   }
 
   formatValue(item) {
