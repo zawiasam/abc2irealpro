@@ -37,7 +37,7 @@ var config = {
   devServer: {
     contentBase: public, // boolean | string | array, static file location
     hot: true,
-    compress: true // enable gzip compression
+    compress: true, // enable gzip compression
   },
   plugins: [
     new webpack.DefinePlugin({
