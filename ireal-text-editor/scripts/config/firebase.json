@@ -1,0 +1,8 @@
+{
+    "production": {
+        "authDomain": "zawiasam.github.io"
+    },
+    "develop": {
+        "authDomain": "localhost"
+    }
+}

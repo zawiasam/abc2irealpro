@@ -2,6 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const firebaseConfig = require("./config/firebase.json");
+const ENV = "production";
 
 const appSrcRoot = path.resolve(__dirname, "..");
 
@@ -39,7 +41,10 @@ var config = {
     // Define production build to allow React to strip out unnecessary checks
     new webpack.DefinePlugin({
       "process.env": {
-        NODE_ENV: JSON.stringify("production")
+        NODE_ENV: JSON.stringify(ENV)
+      },
+      "config": {
+        firebase: JSON.stringify(firebaseConfig[ENV])
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -67,7 +72,7 @@ var config = {
       }
     }),
     new HtmlWebpackPlugin({
-      template: path.join(paths.appSrcRoot, "app/templates/index.html"),
+      template: path.join(paths.appSrcRoot, "app/templates/index.ejs"),
       filename: path.join(paths.appSrcRoot, "index.html"),
       excludeChunks: ["base"],
       minify: {

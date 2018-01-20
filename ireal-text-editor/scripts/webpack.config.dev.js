@@ -1,15 +1,15 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const firebaseConfig = require("./config/firebase.json");
+const ENV = "develop";
 
 const appSrcRoot = path.resolve(__dirname, "..");
 
 const paths = {
   appSrcRoot: appSrcRoot,
   appJsSrc: path.resolve(appSrcRoot, "app/src"),
-  appJsBuild: path.resolve(appSrcRoot, "app/dev"),
-  publicPath: "/app/dev/"
+  appJsBuild: path.resolve(appSrcRoot, "app/dev")
 };
 const public = paths.publicPath;
 
@@ -40,11 +40,17 @@ var config = {
     compress: true // enable gzip compression
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify(ENV)
+      },
+      "config": {
+        firebase: JSON.stringify(firebaseConfig[ENV])
+      }
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(paths.appSrcRoot, "app/templates/index.html"),
-      filename: path.join(paths.publicPath, "index.html"),
-      excludeChunks: ["base"]
+      template: path.join(paths.appSrcRoot, "app/templates/index.ejs")
     })
   ]
 };
