@@ -23,7 +23,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node node_modules/webpack/bin/webpack.js --config=ireal-text-editor/scripts/webpack.config.js",
     "build:watch": "node node_modules/webpack/bin/webpack.js --config=ireal-text-editor/scripts/webpack.config.js -w",
-    "start:dev": "node_modules/.bin/webpack-dev-server --progress --colors --config=ireal-text-editor/scripts/webpack.config.dev.js"
+    "start": "node_modules/.bin/webpack-dev-server --progress --colors --config=ireal-text-editor/scripts/webpack.config.dev.js"
   },
   "repository": {
     "type": "git",

@@ -9,17 +9,33 @@ class UserPanel extends React.Component {
   getInitialState() {
     return {
       isAuthorized: false,
-      userName: null
+      user: null
     };
   }
 
   constructor(props) {
     super(props);
 
-    this.state = this.getInitialState();
+    this.state = {
+      isAuthorized: false,
+      user: null
+    };
+    this.loginHandle = this.loginHandle.bind(this);
+    this.logoutHandle = this.logoutHandle.bind(this);
+    let thisComponent = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        thisComponent.setState({ user });
+      } else {
+        thisComponent.setState({ user: null });
+      }
+    });
   }
 
+  logoutHandle() {}
+
   loginHandle() {
+    let thisComponent = this;
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
@@ -28,9 +44,7 @@ class UserPanel extends React.Component {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
-        var user = result.user;
-        // ...
-        console.dir(result);
+        // thisComponent.setState({ user: result.user });
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -42,6 +56,7 @@ class UserPanel extends React.Component {
         var credential = error.credential;
         // ...
         console.dir(error);
+        thisComponent.setState({ user: null });
       });
   }
 
@@ -49,17 +64,19 @@ class UserPanel extends React.Component {
     return (
       <div style={{ display: "flex", alignItems: "baseline" }}>
         <div style={panelElementStyle}>
-          {this.state.isAuthorized
-            ? `Welcome ${this.state.userName}`
-            : "Welcome stanger"}{" "}
+          {this.state.user
+            ? `Welcome back ${this.state.user.displayName}`
+            : "Welcome stanger"}
         </div>
         <div>
-          {!this.state.isAuthorized ? (
+          {!this.state.user ? (
             <RaisedButton
               label="I don't wanna be a stranger"
               onClick={this.loginHandle}
             />
-          ): (<span>Welcome back</span>)}
+          ) : (
+            <RaisedButton label="Logout" onClick={this.logoutHandle} />
+          )}
         </div>
       </div>
     );
