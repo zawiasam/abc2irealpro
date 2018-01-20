@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { SongEditor } from "./components/songEditor/SongEditor";
+import { UserPanel } from "./components/userPanel/userPanel";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 const styles = {
   textAlign: "center",
@@ -48,11 +49,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
+      <div>
+        <UserPanel onUserLoggedOn={auth => console.dir(auth)} />
         <SongEditor onChange={this.handleSongChange} />
-      </MuiThemeProvider>
+      </div>
     );
   }
 }
 
-render(<App />, document.getElementById("root"));
+render(<MuiThemeProvider><App /></MuiThemeProvider>, document.getElementById("root"));

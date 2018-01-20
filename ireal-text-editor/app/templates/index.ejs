@@ -9,33 +9,33 @@
         }
     </style>
     <% if (process.env.NODE_ENV === "production") { %>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112672250-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112672250-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        gtag('config', 'UA-112672250-1');
-    </script>
-    <% } %>
-    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+            gtag('config', 'UA-112672250-1');
+        </script>
+        <% } %>
+            <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
 
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDuFMhGDCnLynLD-HLg5gzDY1x1-KZpssg",
-            authDomain: "localhost",
-            databaseURL: "https://ireal-text-editor.firebaseio.com",
-            projectId: "ireal-text-editor",
-            storageBucket: "ireal-text-editor.appspot.com",
-            messagingSenderId: "1060242801088"
-        };
-        firebase.initializeApp(config);
-    </script>
+            <script>
+                // Initialize Firebase
+                var config = {
+                    apiKey: "AIzaSyDuFMhGDCnLynLD-HLg5gzDY1x1-KZpssg",
+                    authDomain: "localhost",
+                    databaseURL: "https://ireal-text-editor.firebaseio.com",
+                    projectId: "ireal-text-editor",
+                    storageBucket: "ireal-text-editor.appspot.com",
+                    messagingSenderId: "1060242801088"
+                };
+                firebase.initializeApp(config);
+            </script>
 </head>
 
 <body>
