@@ -1,6 +1,6 @@
 {
     "production": {
-        "authDomain": "zawiasam.github.io/ireal-text-editor/"
+        "authDomain": "zawiasam.github.io"
     },
     "develop": {
         "authDomain": "localhost"
