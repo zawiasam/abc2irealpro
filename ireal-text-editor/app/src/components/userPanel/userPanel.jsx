@@ -32,7 +32,9 @@ class UserPanel extends React.Component {
     });
   }
 
-  logoutHandle() {}
+  logoutHandle() {
+    firebase.auth().signOut();
+  }
 
   loginHandle() {
     let thisComponent = this;

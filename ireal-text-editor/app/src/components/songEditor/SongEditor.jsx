@@ -61,6 +61,7 @@ class SongEditor extends React.Component {
           <pre>x - repeat one prev. chord</pre>
           <pre>% - repeat two prev. chords</pre>
           <pre>n - N.C.</pre>
+          <pre>, - seperate chords</pre>
         </div>
       </div>
     );
