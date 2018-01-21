@@ -27,6 +27,7 @@ class SongInfo extends React.Component {
       <div style={{ display: "block" }}>
         <TextField
           defaultValue={defaultValue.composer || ""}
+          fullWidth={true}
           floatingLabelText="Composer"
           onChange={event => {
             this.doChanged({ composer: event.target.value });
@@ -35,20 +36,30 @@ class SongInfo extends React.Component {
         <br />
         <TextField
           defaultValue={defaultValue.title || ""}
+          fullWidth={true}
           floatingLabelText="Title"
           onChange={event => {
             this.doChanged({ title: event.target.value });
           }}
         />
         <br />
-        <TextField value={defaultValue.style || ""} floatingLabelText="Style" />
+        <TextField
+          value={defaultValue.style || ""}
+          fullWidth={true}
+          floatingLabelText="Style"
+        />
         <br />
         <TextField
           value={defaultValue.measure || ""}
+          fullWidth={true}
           floatingLabelText="Measure"
         />
         <br />
-        <TextField value={defaultValue.key || ""} floatingLabelText="Key" />
+        <TextField
+          value={defaultValue.key || ""}
+          fullWidth={true}
+          floatingLabelText="Key"
+        />
       </div>
     );
   }
