@@ -24,7 +24,8 @@ var config = {
       {
         test: /\.jsx?/,
         include: paths.appJsSrc,
-        loader: "babel-loader"
+        loader: "babel-loader",
+        exclude: /node_modules/
       }
     ]
   },
@@ -43,7 +44,7 @@ var config = {
       "process.env": {
         NODE_ENV: JSON.stringify(ENV)
       },
-      "config": {
+      config: {
         firebase: JSON.stringify(firebaseConfig[ENV])
       }
     }),
@@ -67,8 +68,24 @@ var config = {
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
       filename: "vendor.[chunkhash:8].js",
-      minChunks(module) {
+      minChunks(module, count) {
         return module.context && module.context.indexOf("node_modules") >= 0;
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "ui-libs",
+      filename: "ui-libs.[chunkhash:8].js",
+      minChunks(module, count) {
+        const externals = ['react', 'material-ui'];
+        return module.context && externals.find((e) => module.context.indexOf(e)>=0);
+      }
+    }),
+    //catch all - anything used in more than one place
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "app-common",
+      filename: "app-common.[chunkhash:8].js",
+      minChunks(module, count) {
+        return count >= 2;
       }
     }),
     new HtmlWebpackPlugin({
@@ -84,8 +101,7 @@ var config = {
     }),
     new CleanWebpackPlugin([paths.appJsBuild], {
       allowExternal: true,
-      verbose: true,
-      
+      verbose: true
     })
   ]
 };
