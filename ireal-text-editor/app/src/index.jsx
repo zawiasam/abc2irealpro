@@ -1,8 +1,10 @@
 import React from "react";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 import { render } from "react-dom";
 import { SongEditor } from "./components/songEditor/SongEditor";
-import { UserPanel } from "./components/userPanel/userPanel";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { Panel } from "./components/userPanel/Panel";
+
 const styles = {
   textAlign: "center",
   display: "flex"
@@ -50,11 +52,16 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <UserPanel onUserLoggedOn={auth => console.dir(auth)} />
+        <Panel />
         <SongEditor onChange={this.handleSongChange} />
       </div>
     );
   }
 }
 
-render(<MuiThemeProvider><App /></MuiThemeProvider>, document.getElementById("root"));
+render(
+  <MuiThemeProvider>
+    <App />
+  </MuiThemeProvider>,
+  document.getElementById("root")
+);
