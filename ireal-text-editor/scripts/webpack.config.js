@@ -26,16 +26,23 @@ var config = {
         include: paths.appJsSrc,
         loader: "babel-loader",
         exclude: /node_modules/
+      },
+      {
+        test: /\.tsx?/,
+        include: paths.appJsSrc,
+        loader: "babel-loader!ts-loader",
+        exclude: /node_modules/
       }
     ]
   },
   resolve: {
     modules: [process.env.NODE_PATH || "node_modules"],
-    extensions: [".js", ".jsx"]
+    extensions: [".js", ".jsx", ".tsx"]
   },
   externals: {
     react: "React",
-    "react-dom": "ReactDOM"
+    "react-dom": "ReactDOM",
+    firebase: "firebase"
   },
 
   plugins: [
@@ -76,8 +83,10 @@ var config = {
       name: "ui-libs",
       filename: "ui-libs.[chunkhash:8].js",
       minChunks(module, count) {
-        const externals = ['react', 'material-ui'];
-        return module.context && externals.find((e) => module.context.indexOf(e)>=0);
+        const externals = ["material-ui"];
+        return (
+          module.context && externals.find(e => module.context.indexOf(e) >= 0)
+        );
       }
     }),
     //catch all - anything used in more than one place

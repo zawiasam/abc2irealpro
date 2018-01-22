@@ -1,19 +1,32 @@
-import React from "react";
+import * as React from "react";
 import { TextField, RaisedButton } from "material-ui";
 
-class SongInfo extends React.Component {
-  constructor(props) {
+interface SongInfoProps {
+  defaultValue: SongInfoState;
+  onChange: (value: SongInfoState) => void;
+}
+
+interface SongInfoState {
+  composer: string;
+  title: string;
+  style: string;
+  measure: string;
+  key: string;
+  transpostion: string;
+}
+
+class SongInfo extends React.Component<SongInfoProps> {
+  constructor(props: SongInfoProps) {
     super(props);
     this.state = {
-      chordsText: this.props.song || "",
       ...this.props.defaultValue
     };
 
     this.doChanged = this.doChanged.bind(this);
   }
 
-  doChanged(value) {
-    const state = { ...this.state, ...value };
+  doChanged(value: Partial<SongInfoState>) {
+    const state = { ...this.state, ...value } as SongInfoState;
     if (this.props.onChange) {
       this.props.onChange(state);
     }
@@ -29,8 +42,8 @@ class SongInfo extends React.Component {
           defaultValue={defaultValue.composer || ""}
           fullWidth={true}
           floatingLabelText="Composer"
-          onChange={event => {
-            this.doChanged({ composer: event.target.value });
+          onChange={(event, value: string) => {
+            this.doChanged({ composer: value });
           }}
         />
         <br />
@@ -38,8 +51,8 @@ class SongInfo extends React.Component {
           defaultValue={defaultValue.title || ""}
           fullWidth={true}
           floatingLabelText="Title"
-          onChange={event => {
-            this.doChanged({ title: event.target.value });
+          onChange={(event, value: string) => {
+            this.doChanged({ title: value });
           }}
         />
         <br />

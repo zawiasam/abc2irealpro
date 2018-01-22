@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { ChordEditBox } from "./ChordsEdit";
 import { SongInfo } from "./SongInfoEdit";
 import { TextField } from "material-ui";
@@ -12,9 +12,22 @@ const linkContainerStyle = {
   margintop: "18px"
 };
 
-class SongEditor extends React.Component {
-  constructor(props) {
+interface SongEditorState {
+  title: string;
+  composer: string;
+  style: string;
+  keySignature: string;
+  transpostion: string;
+  measure: string;
+  song: string;
+}
+interface SongEditorProps {
+  onChange: (value: SongEditorState) => void;
+}
+class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
+  constructor(props: SongEditorProps) {
     super(props);
+
     this.state = {
       title: "My song",
       composer: "Unknown Composer",
@@ -29,13 +42,13 @@ class SongEditor extends React.Component {
     this.handleSongInfoChange = this.handleSongInfoChange.bind(this);
   }
 
-  handleSongInfoChange(songInfo) {
-    this.setState(songInfo);
+  handleSongInfoChange(songInfo: Partial<SongEditorState>) {
+    this.setState(songInfo as SongEditorState);
   }
 
-  handleSongChange(text) {
+  handleSongChange(text: string) {
     if (this.props.onChange) {
-      this.props.onChange({...this.state, song: text});
+      this.props.onChange({ ...this.state, song: text });
     }
   }
 
@@ -68,4 +81,4 @@ class SongEditor extends React.Component {
   }
 }
 
-export { SongEditor }
+export { SongEditor };
