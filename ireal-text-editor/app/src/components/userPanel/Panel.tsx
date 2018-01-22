@@ -1,34 +1,51 @@
 import * as React from "react";
 import { AuthPanel } from "./AuthPanel";
 import { AnonPanel } from "./AnonPanel";
+import { AuthState } from "@ireal-text-editor/models";
+import { createLogin } from "@ireal-text-editor/redux-actions";
 
-interface PanelState {
+import { connect, DispatchProp } from "react-redux";
+
+interface PanelState extends AuthState {
   isAuthorized: boolean;
-  user: firebase.UserInfo | null;
 }
+interface PanelProps extends AuthState {}
 
-class Panel extends React.Component<Partial<{}>, PanelState> {
-  constructor(props: Partial<{}>) {
+class Panel extends React.Component<
+  PanelProps & DispatchProp<any>,
+  PanelState
+> {
+  constructor(props: PanelProps) {
     super(props);
     this.state = {
       isAuthorized: false,
-      user: null
+      userInfo: null
     };
     let thisComponent = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        thisComponent.setState({ user, isAuthorized: !user.isAnonymous });
+        if (thisComponent.props.dispatch)
+          thisComponent.props.dispatch(
+            createLogin({
+              provider: ""
+            })
+          );
+        thisComponent.setState({
+          userInfo: user,
+          isAuthorized: !user.isAnonymous
+        });
       } else {
-        thisComponent.setState({ user: null });
+        thisComponent.setState({ userInfo: null });
       }
     });
   }
 
   render() {
-    const user = this.state.user
+    const user = this.state.userInfo
       ? {
-          photoURL: this.state.user.photoURL,
-          displayName: this.state.user.displayName || this.state.user.email
+          photoURL: this.state.userInfo.photoURL,
+          displayName:
+            this.state.userInfo.displayName || this.state.userInfo.email
         }
       : null;
 
@@ -40,4 +57,18 @@ class Panel extends React.Component<Partial<{}>, PanelState> {
   }
 }
 
-export { Panel };
+const PanelContainer: React.SFC<PanelProps> = ({ userInfo }) => {
+  return <Panel userInfo={userInfo} />;
+};
+
+function mapStateToProps(state: AuthState, ownProps: PanelProps) {
+  return {
+    userInfo: state.userInfo
+  };
+}
+
+function mapDispatchToProps() {}
+
+let panel = connect(mapStateToProps)(PanelContainer);
+
+export {};
