@@ -1,8 +1,20 @@
-import React from "react";
+import * as React from "react";
 import { TextField, RaisedButton } from "material-ui";
 
-class ChordEditBox extends React.Component {
-  constructor(props) {
+interface ChordEditBoxProps {
+  song: string;
+  onSubmit: (value: string) => void;
+}
+
+interface ChordEditBoxState {
+  chordsText: string;
+}
+
+class ChordEditBox extends React.Component<
+  ChordEditBoxProps,
+  ChordEditBoxState
+> {
+  constructor(props: ChordEditBoxProps) {
     super(props);
     this.state = {
       chordsText: this.props.song || ""
@@ -21,7 +33,7 @@ class ChordEditBox extends React.Component {
     });
   }
 
-  formatValue(item) {
+  formatValue(item: string) {
     return item
       .replace(" ", ".")
       .replace(/\n/g, "")
@@ -36,8 +48,8 @@ class ChordEditBox extends React.Component {
     this.setState({ chordsText: valueFormatted });
   }
 
-  handleChange(event) {
-    const value = event.target.value;
+  handleChange(event: React.FormEvent<{}>, newValue: string) {
+    const value = newValue;
 
     this.setState({ chordsText: value });
   }
@@ -46,7 +58,7 @@ class ChordEditBox extends React.Component {
     this.onSubmit(this.state.chordsText);
   }
 
-  onSubmit(text) {
+  onSubmit(text: string) {
     if (this.props.onSubmit) {
       this.props.onSubmit(text);
     }

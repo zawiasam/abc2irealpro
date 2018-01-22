@@ -26,25 +26,37 @@ var config = {
       {
         test: /\.jsx?/,
         include: paths.appJsSrc,
-        loader: "babel-loader"
+        loader: "babel-loader",
+        exclude: /node_modules/
+      },
+      {
+        test: /\.tsx?/,
+        include: paths.appJsSrc,
+        loader: "babel-loader!ts-loader",
+        exclude: /node_modules/
       }
     ]
   },
   resolve: {
     modules: [process.env.NODE_PATH || "node_modules"],
-    extensions: [".js", ".jsx"]
+    extensions: [".js", ".jsx", ".tsx"]
+  },
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+    firebase: "firebase"
   },
   devServer: {
     contentBase: public, // boolean | string | array, static file location
     hot: true,
-    compress: true, // enable gzip compression
+    compress: true // enable gzip compression
   },
   plugins: [
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(ENV)
       },
-      "config": {
+      config: {
         firebase: JSON.stringify(firebaseConfig[ENV])
       }
     }),

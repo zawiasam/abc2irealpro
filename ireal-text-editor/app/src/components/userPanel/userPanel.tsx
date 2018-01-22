@@ -1,25 +1,24 @@
-import React from "react";
+import * as React from "react";
 import { RaisedButton } from "material-ui";
+import * as firebase from "firebase";
 
 const panelElementStyle = {
   padding: "8px"
 };
 
-class UserPanel extends React.Component {
-  getInitialState() {
-    return {
-      isAuthorized: false,
-      user: null
-    };
-  }
+interface UserPanelProps {}
+interface UserPanelState {
+  user: firebase.User | undefined;
+}
 
-  constructor(props) {
+class UserPanel extends React.Component<UserPanelProps, UserPanelState> {
+  constructor(props: UserPanelProps) {
     super(props);
 
     this.state = {
-      isAuthorized: false,
-      user: null
+      user: undefined
     };
+
     this.loginHandle = this.loginHandle.bind(this);
     this.logoutHandle = this.logoutHandle.bind(this);
     let thisComponent = this;
@@ -27,7 +26,7 @@ class UserPanel extends React.Component {
       if (user) {
         thisComponent.setState({ user });
       } else {
-        thisComponent.setState({ user: null });
+        thisComponent.setState({ user: undefined });
       }
     });
   }
@@ -58,7 +57,7 @@ class UserPanel extends React.Component {
         var credential = error.credential;
         // ...
         console.dir(error);
-        thisComponent.setState({ user: null });
+        thisComponent.setState({ user: undefined });
       });
   }
 
