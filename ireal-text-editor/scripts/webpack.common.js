@@ -13,7 +13,6 @@ function getConfigCommon(_env_) {
   };
 
   var config = {
-    devtool: "cheap-module-eval-source-map",
     entry: {
       main: paths.appJsSrc + "/index.jsx",
       config: paths.config
