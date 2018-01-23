@@ -1,5 +1,5 @@
 import { AuthState } from "@ireal-text-editor/models";
-import { AuthActions } from "../actions/authActions";
+import { AuthActions } from "@ireal-text-editor/redux-actions";
 
 export function AuthReducer(
   state: AuthState = { userInfo: null },

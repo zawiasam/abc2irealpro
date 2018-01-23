@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const firebaseConfig = require("./config/firebase.json");
+
 const ENV = "production";
 
 const appSrcRoot = path.resolve(__dirname, "..");
@@ -10,14 +10,18 @@ const appSrcRoot = path.resolve(__dirname, "..");
 const paths = {
   appSrcRoot: appSrcRoot,
   appJsSrc: path.resolve(appSrcRoot, "app/src"),
-  appJsBuild: path.resolve(appSrcRoot, "app/build")
+  appJsBuild: path.resolve(appSrcRoot, "app/build"),
+  config: path.resolve(__dirname, `./config/${ENV}.config.js`)
 };
 
 var config = {
-  entry: paths.appJsSrc + "/index.jsx",
+  entry: {
+    main: paths.appJsSrc + "/index.jsx",
+    config: paths.config
+  },
   output: {
     path: paths.appJsBuild,
-    filename: "[name].[chunkhash:8].js"
+    filename: "[name].[hash:8].js"
   },
   module: {
     loaders: [
@@ -37,7 +41,10 @@ var config = {
   },
   resolve: {
     modules: [process.env.NODE_PATH || "node_modules"],
-    extensions: [".js", ".jsx", ".tsx"]
+    extensions: [".js", ".jsx", ".tsx", ".ts"],
+    alias: {
+      "app-config": paths.config
+    }
   },
   externals: {
     react: "React",
@@ -50,9 +57,6 @@ var config = {
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(ENV)
-      },
-      config: {
-        firebase: JSON.stringify(firebaseConfig[ENV])
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -92,7 +96,7 @@ var config = {
     //catch all - anything used in more than one place
     new webpack.optimize.CommonsChunkPlugin({
       name: "app-common",
-      filename: "app-common.[chunkhash:8].js",
+      filename: "app-common.[hash:8].js",
       minChunks(module, count) {
         return count >= 2;
       }

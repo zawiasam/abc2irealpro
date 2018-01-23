@@ -1,4 +1,3 @@
-import {createLogin} from './authActions'
+import { createLogin, AuthActions } from "./authActions";
 
-
-export {createLogin}
+export { createLogin, AuthActions };

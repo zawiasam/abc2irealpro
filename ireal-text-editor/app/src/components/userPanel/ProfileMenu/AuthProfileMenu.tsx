@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RaisedButton } from "material-ui";
+import * as firebase from 'firebase';
 
 interface ProfileMenuAuthProps {
   photoUrl: string | null;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as firebase from "firebase";
 import { AuthProfileMenu } from "./ProfileMenu/AuthProfileMenu";
 
 const panelElementStyle = { paddingRight: "8px" };

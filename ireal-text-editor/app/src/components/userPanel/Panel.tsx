@@ -1,10 +1,12 @@
 import * as React from "react";
 import { AuthPanel } from "./AuthPanel";
 import { AnonPanel } from "./AnonPanel";
+
 import { AuthState } from "@ireal-text-editor/models";
 import { createLogin } from "@ireal-text-editor/redux-actions";
 
 import { connect, DispatchProp } from "react-redux";
+import * as firebase from 'firebase';
 
 interface PanelState extends AuthState {
   isAuthorized: boolean;
@@ -71,4 +73,4 @@ function mapDispatchToProps() {}
 
 let panel = connect(mapStateToProps)(PanelContainer);
 
-export {};
+export { panel as Panel };

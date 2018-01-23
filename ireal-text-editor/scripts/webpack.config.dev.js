@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const firebaseConfig = require("./config/firebase.json");
 const ENV = "develop";
 
 const appSrcRoot = path.resolve(__dirname, "..");
@@ -9,17 +8,21 @@ const appSrcRoot = path.resolve(__dirname, "..");
 const paths = {
   appSrcRoot: appSrcRoot,
   appJsSrc: path.resolve(appSrcRoot, "app/src"),
-  appJsBuild: path.resolve(appSrcRoot, "app/dev")
+  appJsBuild: path.resolve(appSrcRoot, "app/dev"),
+  config: path.resolve(__dirname, `./config/${ENV}.config.js`)
 };
 const public = paths.publicPath;
 
 var config = {
   devtool: "cheap-module-eval-source-map",
-  entry: paths.appJsSrc + "/index.jsx",
+  entry: {
+    main: paths.appJsSrc + "/index.jsx",
+    config: paths.config
+  },
   output: {
     path: paths.appJsBuild,
     publicPath: paths.publicPath,
-    filename: "bundle.js"
+    filename: "[name].[hash:8].js"
   },
   module: {
     loaders: [
@@ -39,12 +42,10 @@ var config = {
   },
   resolve: {
     modules: [process.env.NODE_PATH || "node_modules"],
-    extensions: [".js", ".jsx", ".tsx"]
-  },
-  externals: {
-    react: "React",
-    "react-dom": "ReactDOM",
-    firebase: "firebase"
+    extensions: [".js", ".jsx", ".tsx", ".ts"],
+    alias: {
+      "app-config": paths.config
+    }
   },
   devServer: {
     contentBase: public, // boolean | string | array, static file location
@@ -55,9 +56,6 @@ var config = {
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(ENV)
-      },
-      config: {
-        firebase: JSON.stringify(firebaseConfig[ENV])
       }
     }),
     new webpack.HotModuleReplacementPlugin(),

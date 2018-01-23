@@ -6,11 +6,8 @@ const panelElementStyle = {
 };
 
 interface AnonPanelProps {}
-interface AnonPanelState {
-  user: firebase.User | undefined;
-}
 
-class AnonPanel extends React.Component<AnonPanelProps, AnonPanelState> {
+class AnonPanel extends React.Component<AnonPanelProps> {
   constructor(props: AnonPanelProps) {
     super(props);
 
