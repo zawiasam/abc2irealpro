@@ -4,61 +4,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const ENV = "production";
+const configCommon = require("./webpack.common")(ENV);
 
-const appSrcRoot = path.resolve(__dirname, "..");
-
-const paths = {
-  appSrcRoot: appSrcRoot,
-  appJsSrc: path.resolve(appSrcRoot, "app/src"),
-  appJsBuild: path.resolve(appSrcRoot, "app/build"),
-  config: path.resolve(__dirname, `./config/${ENV}.config.js`)
-};
-
-var config = {
-  entry: {
-    main: paths.appJsSrc + "/index.jsx",
-    config: paths.config
-  },
-  output: {
-    path: paths.appJsBuild,
-    filename: "[name].[hash:8].js"
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?/,
-        include: paths.appJsSrc,
-        loader: "babel-loader",
-        exclude: /node_modules/
-      },
-      {
-        test: /\.tsx?/,
-        include: paths.appJsSrc,
-        loader: "babel-loader!ts-loader",
-        exclude: /node_modules/
-      }
-    ]
-  },
-  resolve: {
-    modules: [process.env.NODE_PATH || "node_modules"],
-    extensions: [".js", ".jsx", ".tsx", ".ts"],
-    alias: {
-      "app-config": paths.config
-    }
-  },
+const config = Object.assign({}, configCommon.config, {
   externals: {
     react: "React",
     "react-dom": "ReactDOM",
     firebase: "firebase"
   },
 
-  plugins: [
-    // Define production build to allow React to strip out unnecessary checks
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(ENV)
-      }
-    }),
+  plugins: [].concat(configCommon.config.plugins, [
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
@@ -102,8 +57,11 @@ var config = {
       }
     }),
     new HtmlWebpackPlugin({
-      template: path.join(paths.appSrcRoot, "app/templates/index.ejs"),
-      filename: path.join(paths.appSrcRoot, "index.html"),
+      template: path.join(
+        configCommon.paths.appSrcRoot,
+        "app/templates/index.ejs"
+      ),
+      filename: path.join(configCommon.paths.appSrcRoot, "index.html"),
       excludeChunks: ["base"],
       minify: {
         collapseWhitespace: true,
@@ -112,11 +70,11 @@ var config = {
         removeRedundantAttributes: true
       }
     }),
-    new CleanWebpackPlugin([paths.appJsBuild], {
+    new CleanWebpackPlugin([configCommon.paths.appJsBuild], {
       allowExternal: true,
       verbose: true
     })
-  ]
-};
+  ])
+});
 
 module.exports = config;

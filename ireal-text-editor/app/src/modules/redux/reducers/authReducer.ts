@@ -7,7 +7,19 @@ export function AuthReducer(
 ): AuthState {
   switch (action.type) {
     case "@APP/LOGIN/REQUEST":
-      return { ...state };
+      return {
+        ...state,
+        ...{
+          userInfo: {
+            displayName: "Maćko",
+            uid: "uuid",
+            providerId: action.loginRequest.provider,
+            email: "mail",
+            phoneNumber: "000-000-000-000",
+            photoURL: "http://url"
+          }
+        }
+      };
     default:
       return state;
   }

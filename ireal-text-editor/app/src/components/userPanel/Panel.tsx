@@ -59,8 +59,8 @@ class Panel extends React.Component<
   }
 }
 
-const PanelContainer: React.SFC<PanelProps> = ({ userInfo }) => {
-  return <Panel userInfo={userInfo} />;
+const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({ userInfo, dispatch }) => {
+  return <Panel userInfo={userInfo} dispatch={dispatch}/>;
 };
 
 function mapStateToProps(state: AuthState, ownProps: PanelProps) {
