@@ -18,7 +18,7 @@ class AnonPanel extends React.Component<AnonPanelProps> {
 
   render() {
     return (
-      <div style={{ display: "flex", alignItems: "baseline" }}>
+      <div style={{ display: "flex" }}>
         <div style={panelElementStyle}>Welcome stanger</div>
         <AnonProfileMenu />
       </div>

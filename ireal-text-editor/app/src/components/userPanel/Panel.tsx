@@ -9,7 +9,7 @@ import { connect, DispatchProp } from "react-redux";
 import * as firebase from 'firebase';
 
 interface PanelState extends AuthState {
-  isAuthorized: boolean;
+  isAuthorized: boolean | null;
 }
 interface PanelProps extends AuthState {}
 
@@ -20,7 +20,7 @@ class Panel extends React.Component<
   constructor(props: PanelProps) {
     super(props);
     this.state = {
-      isAuthorized: false,
+      isAuthorized: null,
       userInfo: null
     };
     let thisComponent = this;
@@ -37,7 +37,7 @@ class Panel extends React.Component<
           isAuthorized: !user.isAnonymous
         });
       } else {
-        thisComponent.setState({ userInfo: null });
+        thisComponent.setState({ userInfo: null, isAuthorized: false });
       }
     });
   }
@@ -51,11 +51,11 @@ class Panel extends React.Component<
         }
       : null;
 
-    return this.state.isAuthorized && user ? (
+    return  (this.state.isAuthorized != null) ?  this.state.isAuthorized && user ? (
       <AuthPanel displayName={user.displayName} photoURL={user.photoURL} />
     ) : (
       <AnonPanel />
-    );
+    ) : null;
   }
 }
 

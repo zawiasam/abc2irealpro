@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const ENV = "production";
 const configCommon = require("./webpack.common")(ENV);
@@ -69,10 +68,6 @@ const config = Object.assign({}, configCommon.config, {
         removeComments: true,
         removeRedundantAttributes: true
       }
-    }),
-    new CleanWebpackPlugin([configCommon.paths.appJsBuild], {
-      allowExternal: true,
-      verbose: true
     })
   ])
 });
