@@ -2,70 +2,74 @@ import * as React from "react";
 import { AuthPanel } from "./AuthPanel";
 import { AnonPanel } from "./AnonPanel";
 
-import { AuthState } from "@ireal-text-editor/models";
-import { createLogin } from "@ireal-text-editor/redux-actions";
+import { AuthState, RootState } from "@ireal-text-editor/models";
+import { UserLogin, UserLogout } from "@ireal-text-editor/redux-actions";
 
 import { connect, DispatchProp } from "react-redux";
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
 
-interface PanelState extends AuthState {
-  isAuthorized: boolean | null;
-}
+interface PanelState extends AuthState {}
 interface PanelProps extends AuthState {}
 
-class Panel extends React.Component<
-  PanelProps & DispatchProp<any>,
-  PanelState
-> {
+class Panel extends React.Component<PanelProps & DispatchProp<any>> {
   constructor(props: PanelProps) {
     super(props);
-    this.state = {
-      isAuthorized: null,
-      userInfo: null
-    };
+
     let thisComponent = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         if (thisComponent.props.dispatch)
           thisComponent.props.dispatch(
-            createLogin({
-              provider: ""
+            UserLogin({
+              userInfo: user,
+              isAuthorized: !user.isAnonymous
             })
           );
-        thisComponent.setState({
-          userInfo: user,
-          isAuthorized: !user.isAnonymous
-        });
       } else {
-        thisComponent.setState({ userInfo: null, isAuthorized: false });
+        if (thisComponent.props.dispatch) {
+          thisComponent.props.dispatch(UserLogout());
+        }
       }
     });
   }
 
   render() {
-    const user = this.state.userInfo
+    const user = this.props.userInfo
       ? {
-          photoURL: this.state.userInfo.photoURL,
+          photoURL: this.props.userInfo.photoURL,
           displayName:
-            this.state.userInfo.displayName || this.state.userInfo.email
+            this.props.userInfo.displayName || this.props.userInfo.email
         }
       : null;
 
-    return  (this.state.isAuthorized != null) ?  this.state.isAuthorized && user ? (
-      <AuthPanel displayName={user.displayName} photoURL={user.photoURL} />
-    ) : (
-      <AnonPanel />
+    return this.props.isAuthorized != null ? (
+      this.props.isAuthorized && user ? (
+        <AuthPanel displayName={user.displayName} photoURL={user.photoURL} />
+      ) : (
+        <AnonPanel />
+      )
     ) : null;
   }
 }
 
-const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({ userInfo, dispatch }) => {
-  return <Panel userInfo={userInfo} dispatch={dispatch}/>;
+const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
+  userInfo,
+  isAuthorized,
+  dispatch
+}) => {
+  return (
+    <Panel
+      userInfo={userInfo}
+      isAuthorized={isAuthorized}
+      dispatch={dispatch}
+    />
+  );
 };
 
-function mapStateToProps(state: AuthState, ownProps: PanelProps) {
+function mapStateToProps(state: RootState, ownProps: PanelProps) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.authState.userInfo,
+    isAuthorized: state.authState.isAuthorized
   };
 }
 

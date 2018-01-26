@@ -2,24 +2,21 @@ import { AuthState } from "@ireal-text-editor/models";
 import { AuthActions } from "@ireal-text-editor/redux-actions";
 
 export function AuthReducer(
-  state: AuthState = { userInfo: null },
+  state: AuthState = { userInfo: null, isAuthorized: null },
   action: AuthActions
 ): AuthState {
   switch (action.type) {
     case "@APP/LOGIN/REQUEST":
       return {
         ...state,
-        ...{
-          userInfo: {
-            displayName: "Maćko",
-            uid: "uuid",
-            providerId: action.loginRequest.provider,
-            email: "mail",
-            phoneNumber: "000-000-000-000",
-            photoURL: "http://url"
-          }
+        ...action.loginRequest
         }
-      };
+    case "@APP/LOGOUT/REQUEST": {
+      return {
+        ...state,
+        isAuthorized: action.logoutRequest.isAuthorized
+      }
+    }
     default:
       return state;
   }

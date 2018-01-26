@@ -1,7 +1,14 @@
 import { Action } from "redux";
+import { UserInfo } from "@ireal-text-editor/models";
+import face from "material-ui/svg-icons/action/face";
 
 interface LoginRequest {
-  provider: string;
+  userInfo: UserInfo;
+  isAuthorized: boolean;
+}
+
+interface LogoutRequest {
+  isAuthorized: boolean;
 }
 
 interface LoginAction extends Action {
@@ -9,14 +16,25 @@ interface LoginAction extends Action {
   loginRequest: LoginRequest;
 }
 
-type AuthActions = LoginAction;
+interface LogoutAction extends Action {
+  type: "@APP/LOGOUT/REQUEST";
+  logoutRequest: LogoutRequest;
+}
 
-function createLogin(loginRequest: LoginRequest): LoginAction {
+type AuthActions = LoginAction | LogoutAction;
+
+function UserLogin(loginRequest: LoginRequest): LoginAction {
   return {
     loginRequest,
     type: "@APP/LOGIN/REQUEST"
   };
 }
 
+function UserLogout(): LogoutAction {
+  return {
+    type: "@APP/LOGOUT/REQUEST",
+    logoutRequest: { isAuthorized: false }
+  };
+}
 
-export {createLogin, AuthActions }
+export { UserLogin, UserLogout, AuthActions };

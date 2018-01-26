@@ -6,7 +6,7 @@ function configureStore(initialState: any) {
   return createStore(
     rootReducer,
     initialState,
-    applyMiddleware(reduxImmutableStateInvariant())
+    
   );
 }
 
