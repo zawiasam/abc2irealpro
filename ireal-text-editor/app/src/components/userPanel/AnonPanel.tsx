@@ -6,11 +6,8 @@ const panelElementStyle = {
 };
 
 interface AnonPanelProps {}
-interface AnonPanelState {
-  user: firebase.User | undefined;
-}
 
-class AnonPanel extends React.Component<AnonPanelProps, AnonPanelState> {
+class AnonPanel extends React.Component<AnonPanelProps> {
   constructor(props: AnonPanelProps) {
     super(props);
 
@@ -21,7 +18,7 @@ class AnonPanel extends React.Component<AnonPanelProps, AnonPanelState> {
 
   render() {
     return (
-      <div style={{ display: "flex", alignItems: "baseline" }}>
+      <div style={{ display: "flex" }}>
         <div style={panelElementStyle}>Welcome stanger</div>
         <AnonProfileMenu />
       </div>

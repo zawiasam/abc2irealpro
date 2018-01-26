@@ -1,6 +1,7 @@
 import * as React from "react";
 import { RaisedButton } from "material-ui";
 import * as firebase from "firebase";
+import { icons } from "@ireal-text-editor/assets";
 
 class AnonProfileMenu extends React.Component {
   loginHandle = () => {
@@ -31,15 +32,18 @@ class AnonProfileMenu extends React.Component {
 
   render() {
     return (
-      <div className={""}>
+      <div style={{ display: "flex" }}>
+        <div>
+          <img
+            style={{ height: "36px", width: "36px" }}
+            src={icons.paperBagPerson}
+          />
+        </div>
         <div>
           <RaisedButton
             label="I don't wanna be a stranger"
             onClick={this.loginHandle}
           />
-        </div>
-        <div>
-          <img src={"/default/profile/avatar_not_logged.png"} />
         </div>
       </div>
     );

@@ -5,6 +5,15 @@ import { render } from "react-dom";
 import { SongEditor } from "./components/songEditor/SongEditor";
 import { Panel } from "./components/userPanel/Panel";
 
+import { Provider } from "react-redux";
+import { configureStore } from "@ireal-text-editor/redux-store";
+
+import appConfig from "app-config";
+import * as firebase from 'firebase';
+
+firebase.initializeApp(appConfig);
+const store = configureStore();
+
 const styles = {
   textAlign: "center",
   display: "flex"
@@ -60,8 +69,10 @@ class App extends React.Component {
 }
 
 render(
-  <MuiThemeProvider>
-    <App />
-  </MuiThemeProvider>,
+  <Provider store={store}>
+    <MuiThemeProvider>
+      <App />
+    </MuiThemeProvider>
+  </Provider>,
   document.getElementById("root")
 );
