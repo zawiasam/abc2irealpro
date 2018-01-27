@@ -10,6 +10,7 @@ function getConfigCommon(_env_) {
     appSrcRoot: appSrcRoot,
     appJsSrc: path.resolve(appSrcRoot, "app/src"),
     appJsBuild: path.resolve(appSrcRoot, "app/build"),
+    appAssets: "app/build/",
     config: path.resolve(__dirname, `./config/${_env_}.config.js`)
   };
 
@@ -40,19 +41,9 @@ function getConfigCommon(_env_) {
           test: /\.svg$/,
           loader: "file-loader",
           exclude: /node_modules/,
-          query: {
-            classIdPrefix: "[name]-[hash:8]__",
-            filters: [
-              function(value) {
-                // ...
-                this.update(newvalue);
-              }
-            ],
-            propsMap: {
-              fillRule: "fill-rule",
-              foo: "bar"
-            },
-            xmlnsTest: /^xmlns.*$/
+          options: {
+            publicPath: paths.appAssets,
+            useRelativePath: true
           }
         }
       ]
