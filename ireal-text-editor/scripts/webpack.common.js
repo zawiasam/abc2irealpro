@@ -26,13 +26,13 @@ function getConfigCommon(_env_) {
     module: {
       loaders: [
         {
-          test: /\.jsx?/,
+          test: /\.jsx?$/,
           include: paths.appJsSrc,
           loader: "babel-loader",
           exclude: /node_modules/
         },
         {
-          test: /\.tsx?/,
+          test: /\.tsx?$/,
           include: paths.appJsSrc,
           loader: "babel-loader!ts-loader",
           exclude: /node_modules/
