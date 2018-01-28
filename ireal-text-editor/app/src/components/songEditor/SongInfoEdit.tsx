@@ -11,7 +11,7 @@ interface SongInfoState {
   title: string;
   style: string;
   measure: string;
-  key: string;
+  keySignature: string;
   transpostion: string;
 }
 
@@ -69,7 +69,7 @@ class SongInfo extends React.Component<SongInfoProps> {
         />
         <br />
         <TextField
-          value={defaultValue.key || ""}
+          value={defaultValue.keySignature || ""}
           fullWidth={true}
           floatingLabelText="Key"
         />

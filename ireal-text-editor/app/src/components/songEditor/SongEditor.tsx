@@ -2,6 +2,7 @@ import * as React from "react";
 import { ChordEditBox } from "./ChordsEdit";
 import { SongInfo } from "./SongInfoEdit";
 import { TextField } from "material-ui";
+import { SongData } from "@ireal-text-editor/models";
 
 const styles = {
   textAlign: "center",
@@ -12,15 +13,7 @@ const linkContainerStyle = {
   margintop: "18px"
 };
 
-interface SongEditorState {
-  title: string;
-  composer: string;
-  style: string;
-  keySignature: string;
-  transpostion: string;
-  measure: string;
-  song: string;
-}
+interface SongEditorState extends SongData {}
 interface SongEditorProps {
   onChange: (value: SongEditorState) => void;
 }
@@ -60,7 +53,7 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
             title: "My song",
             composer: "Unknown Composer",
             style: "Medium Swing",
-            key: "C",
+            keySignature: "C",
             transpostion: "n",
             measure: "4/4"
           }}
