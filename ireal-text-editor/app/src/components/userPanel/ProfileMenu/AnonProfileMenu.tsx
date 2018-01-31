@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RaisedButton } from "material-ui";
+import Button from "material-ui/Button";
 import * as firebase from "firebase";
 import { icons } from "@ireal-text-editor/assets";
 
@@ -40,10 +40,9 @@ class AnonProfileMenu extends React.Component {
           />
         </div>
         <div>
-          <RaisedButton
-            label="I don't wanna be a stranger"
-            onClick={this.loginHandle}
-          />
+          <Button raised onClick={this.loginHandle}>
+            I don't wanna be a stranger
+          </Button>
         </div>
       </div>
     );

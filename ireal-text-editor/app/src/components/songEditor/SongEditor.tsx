@@ -16,6 +16,7 @@ const linkContainerStyle = {
 interface SongEditorState extends SongData {}
 interface SongEditorProps {
   onChange: (value: SongEditorState) => void;
+  onSave: (value: SongEditorState) => void;
 }
 class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   constructor(props: SongEditorProps) {
@@ -45,6 +46,12 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
     }
   }
 
+  handleSongSave = (text: string) => {
+    if (this.props.onSave) {
+      this.props.onSave({ ...this.state, song: text });
+    }
+  };
+  
   render() {
     return (
       <div style={styles}>
@@ -62,6 +69,7 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
         <div style={{ width: "100%" }}>
           <ChordEditBox
             onSubmit={this.handleSongChange}
+            onSave={this.handleSongSave}
             song={this.state.song}
           />
           <pre>x - repeat one prev. chord</pre>

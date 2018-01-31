@@ -1,6 +1,5 @@
 import { Action } from "redux";
 import { UserInfo } from "@ireal-text-editor/models";
-import face from "material-ui/svg-icons/action/face";
 
 interface LoginRequest {
   userInfo: UserInfo;

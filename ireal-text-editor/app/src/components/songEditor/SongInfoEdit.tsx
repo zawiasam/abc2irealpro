@@ -1,5 +1,24 @@
 import * as React from "react";
-import { TextField, RaisedButton } from "material-ui";
+import { TextField, WithStyles } from "material-ui";
+import { withStyles, Theme, StyleRules, StyleRulesCallback } from "material-ui/styles";
+import { ClassNameMap } from "material-ui/styles/withStyles";
+
+const styles: StyleRules<string> | StyleRulesCallback<string> = (theme: Theme) => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit / 2,
+    width: 200
+  },
+  menu: {
+    width: 200
+  }
+});
 
 interface SongInfoProps {
   defaultValue: SongInfoState;
@@ -15,8 +34,8 @@ interface SongInfoState {
   transpostion: string;
 }
 
-class SongInfo extends React.Component<SongInfoProps> {
-  constructor(props: SongInfoProps) {
+class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<string>> {
+  constructor(props: SongInfoProps & WithStyles<string>) {
     super(props);
     this.state = {
       ...this.props.defaultValue
@@ -36,46 +55,53 @@ class SongInfo extends React.Component<SongInfoProps> {
 
   render() {
     const defaultValue = this.props.defaultValue;
+    const { classes } = this.props;
+
     return (
       <div style={{ display: "block" }}>
         <TextField
+          className={classes.textField}
           defaultValue={defaultValue.composer || ""}
           fullWidth={true}
-          floatingLabelText="Composer"
-          onChange={(event, value: string) => {
-            this.doChanged({ composer: value });
+          label="Composer"
+          onChange={event => {
+            this.doChanged({ composer: event.currentTarget.value });
           }}
         />
         <br />
         <TextField
+          className={classes.textField}
           defaultValue={defaultValue.title || ""}
           fullWidth={true}
-          floatingLabelText="Title"
-          onChange={(event, value: string) => {
-            this.doChanged({ title: value });
+          label="Title"
+          onChange={event => {
+            this.doChanged({ title: event.currentTarget.value });
           }}
         />
         <br />
         <TextField
+          className={classes.textField}
           value={defaultValue.style || ""}
           fullWidth={true}
-          floatingLabelText="Style"
+          label="Style"
         />
         <br />
         <TextField
+          className={classes.textField}
           value={defaultValue.measure || ""}
           fullWidth={true}
-          floatingLabelText="Measure"
+          label="Measure"
         />
         <br />
         <TextField
+          className={classes.textField}
           value={defaultValue.keySignature || ""}
           fullWidth={true}
-          floatingLabelText="Key"
+          label="Key"
         />
       </div>
     );
   }
 }
-
+const SongInfo = withStyles(styles)(SongInfoComponent);
 export { SongInfo };

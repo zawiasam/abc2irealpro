@@ -1,9 +1,11 @@
 import * as React from "react";
-import { TextField, RaisedButton } from "material-ui";
+import { TextField } from "material-ui";
+import Button from "material-ui/Button";
 
 interface ChordEditBoxProps {
   song: string;
   onSubmit: (value: string) => void;
+  onSave: (value: string) => void;
 }
 
 interface ChordEditBoxState {
@@ -48,14 +50,24 @@ class ChordEditBox extends React.Component<
     this.setState({ chordsText: valueFormatted });
   }
 
-  handleChange(event: React.FormEvent<{}>, newValue: string) {
-    const value = newValue;
+  handleChange(event: React.SyntheticEvent<HTMLInputElement>) {
+    const value = event.currentTarget.value;
 
     this.setState({ chordsText: value });
   }
 
   handleSubmit() {
     this.onSubmit(this.state.chordsText);
+  }
+
+  handleSave = () => {
+    this.onSave(this.state.chordsText);
+  };
+
+  onSave(text: string) {
+    if (this.props.onSave) {
+      this.props.onSave(text);
+    }
   }
 
   onSubmit(text: string) {
@@ -78,28 +90,40 @@ class ChordEditBox extends React.Component<
         <div>
           <TextField
             id="chords"
-            floatingLabelText="Chords"
-            multiLine={true}
-            rows={2}
-            rowsMax={10}
-            value={this.state.chordsText}
+            label="Chords"
+            multiline
+            rows="4"
+            defaultValue="Default Value"
+            margin="normal"
             onChange={this.handleChange}
-            style={textFieldSytle}
             fullWidth={true}
+            InputProps={{style: textFieldSytle}}
+            value={this.state.chordsText}
           />
         </div>
         <div>
-          <RaisedButton
-            onClick={this.handlePrettify}
+          <Button
+            raised
+            color="primary"
+            onClick={this.handleSave}
             style={style}
-            label="prettify a little"
-          />
-          <RaisedButton
+          >
+            save
+          </Button>
+          <Button
+            raised
+            color="secondary"
             onClick={this.handleSubmit}
             style={style}
-            label="generate song"
-          />
-          <RaisedButton onClick={this.clearText} style={style} label="clear" />
+          >
+            generate song
+          </Button>
+          <Button raised onClick={this.handlePrettify} style={style}>
+            prettify a little
+          </Button>
+          <Button raised onClick={this.clearText} style={style}>
+            clear
+          </Button>
         </div>
       </div>
     );

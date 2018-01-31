@@ -1,9 +1,11 @@
 import * as React from "react";
 import { SongEditor } from "./SongEditor";
 import { SongData } from "@ireal-text-editor/models";
+import * as firebase from "firebase";
+import "@firebase/firestore";
 
-const IrealLinkGenerator: React.SFC = () => {
-  function encodeLink(songInfo: SongData) {
+class IrealLinkGenerator extends React.Component {
+  encodeLink = (songInfo: SongData) => {
     let header = [
       songInfo.title,
       songInfo.composer,
@@ -25,14 +27,37 @@ const IrealLinkGenerator: React.SFC = () => {
     } else {
       return "";
     }
-  }
+  };
 
-  function handleSongChange(song: SongData) {
-    const url = encodeLink(song);
+  handleSongChange = (song: SongData) => {
+    const url = this.encodeLink(song);
     url && window.open(url, "_blank");
-  }
+  };
 
-  return <SongEditor onChange={handleSongChange} />;
-};
+  handleSongSave = (songData: SongData) => {
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      firebase
+        .firestore()
+        .collection(`users/${currentUser.uid}/chords`)
+        .doc(songData.title)
+        .set(songData)
+        .then(function() {
+          console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
+    }
+  };
+  render() {
+    return (
+      <SongEditor
+        onChange={this.handleSongChange}
+        onSave={this.handleSongSave}
+      />
+    );
+  }
+}
 
 export { IrealLinkGenerator };
