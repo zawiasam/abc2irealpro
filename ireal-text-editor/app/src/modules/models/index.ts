@@ -7,6 +7,7 @@ export interface AuthState {
 
 export interface RootState {
   authState: AuthState;
+  songList: SongData[];
 }
 
 export interface SongData {
@@ -17,5 +18,7 @@ export interface SongData {
   transpostion: string;
   measure: string;
   song: string;
+  id: string | null;
 }
+
 export { UserInfo };
