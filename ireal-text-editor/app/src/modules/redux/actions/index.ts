@@ -1,4 +1,4 @@
 import { UserLogin, UserLogout, AuthActions } from "./authActions";
-import { GetSongList, SongActions } from "./songActions";
+import { GetSongRequest, SongActions } from "./songActions";
 
-export { UserLogin, UserLogout, AuthActions, GetSongList, SongActions };
+export { UserLogin, UserLogout, AuthActions, GetSongRequest, SongActions };

@@ -31,6 +31,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-immutable-state-invariant": "^2.1.0",
+    "redux-thunk": "^2.2.0",
     "svg-react-loader": "^0.4.5",
     "ts-loader": "^3.3.0",
     "tslint": "^5.9.1",
