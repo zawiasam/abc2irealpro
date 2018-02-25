@@ -1,6 +1,7 @@
 import { Action, Dispatch } from "redux";
 import { UserInfo, SongData } from "@ireal-text-editor/models";
 import * as firebase from "firebase";
+import { ShowNotificationCreate } from "./notificationActions";
 
 interface SongListRequest extends Action {
   type: "@APP/SONG_LIST/REQUEST";
@@ -72,7 +73,22 @@ export function saveSong(dispatch: Dispatch<any>) {
         .set(songData)
         .then(function() {
           dispatch(GetSongSaveSucess());
+          dispatch(
+            ShowNotificationCreate({
+              autoclose: false,
+              type: "success",
+              message: "Document saved correctly"
+            })
+          );
         });
+    } else {
+      dispatch(
+        ShowNotificationCreate({
+          autoclose: false,
+          type: "failure",
+          message: "Stanger is not allowed to preform this action!"
+        })
+      );
     }
   };
 }

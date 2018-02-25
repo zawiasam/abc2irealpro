@@ -55,37 +55,6 @@ class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
     url && window.open(url, "_blank");
   };
 
-  handleSongSave = (songData: SongData) => {
-    const currentUser = firebase.auth().currentUser;
-    const component = this;
-    if (currentUser) {
-      firebase
-        .firestore()
-        .collection(`users/${currentUser.uid}/chords`)
-        .doc(songData.id)
-        .set(songData)
-        .then(function() {
-          component.setState({
-            snackbarMessage: "Document successfully written!",
-            snackbarVisible: true,
-            snackbarType: "success"
-          });
-        })
-        .catch(function(error) {
-          component.setState({
-            snackbarMessage: `Error writing document: ${error}`,
-            snackbarVisible: true,
-            snackbarType: "error"
-          });
-        });
-    } else {
-      component.setState({
-        snackbarMessage: `Stanger is not allowed to preform this action!`,
-        snackbarVisible: true,
-        snackbarType: "error"
-      });
-    }
-  };
   render() {
     return (
       <div>

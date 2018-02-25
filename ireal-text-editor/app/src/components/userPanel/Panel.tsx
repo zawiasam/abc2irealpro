@@ -7,6 +7,7 @@ import { UserLogin, UserLogout } from "@ireal-text-editor/redux-actions";
 
 import { connect, DispatchProp } from "react-redux";
 import * as firebase from "firebase";
+import { NotificationContainer } from "../appComponents/notification/notificationContainer";
 
 interface PanelState extends AuthState {}
 interface PanelProps extends AuthState {}
@@ -58,11 +59,14 @@ const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
   dispatch
 }) => {
   return (
+    <div>
     <Panel
       userInfo={userInfo}
       isAuthorized={isAuthorized}
       dispatch={dispatch}
     />
+    <NotificationContainer />
+    </div>
   );
 };
 

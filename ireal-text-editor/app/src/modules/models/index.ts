@@ -5,9 +5,18 @@ export interface AuthState {
   isAuthorized: boolean | null;
 }
 
+export type NotificationType = "success" | "failure" | "warning";
+
+export interface NotificationModel {
+  message: string | undefined;
+  type: NotificationType;
+  autoclose: boolean;
+}
+
 export interface RootState {
   authState: AuthState;
   songList: SongData[];
+  notification: NotificationModel;
 }
 
 export interface SongData {
