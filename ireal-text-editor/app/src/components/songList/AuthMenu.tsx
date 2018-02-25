@@ -12,7 +12,7 @@ class AuthMenu extends React.Component<AuthMenuProps> {
   render() {
     return (
       <div>
-        <Link style={{ textDecoration: 'none', color: 'inherit'}} to="/songList"><Button raised>My songs</Button></Link>
+        <Link style={{ textDecoration: 'none', color: 'inherit'}} to="/songList"><Button variant='raised'>My songs</Button></Link>
       </div>
     );
   }

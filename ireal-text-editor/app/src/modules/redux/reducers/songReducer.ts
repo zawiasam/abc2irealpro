@@ -1,5 +1,6 @@
 import { SongData } from "@ireal-text-editor/models";
 import { SongActions } from "@ireal-text-editor/redux-actions";
+import { uuidv4 } from "@ireal-text-editor/lib";
 
 export function SongReducer(
   state: SongData[] = [],
@@ -16,7 +17,7 @@ export function SongReducer(
           song: "",
           style: "style",
           transpostion: "n",
-          id: null
+          id: uuidv4()
         }
       ];
     default:

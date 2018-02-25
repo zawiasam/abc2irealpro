@@ -12,7 +12,20 @@ interface SongListSuccess extends Action {
   songList: SongData[];
 }
 
-type SongActions = SongListRequest | SongListSuccess;
+interface SongSaveRequest extends Action {
+  type: "@APP/SONG_STORE/REQUEST";
+  songData: SongData;
+}
+
+interface SongSaveSuccess extends Action {
+  type: "@APP/SONG_STORE/SUCCESS";
+}
+
+type SongActions =
+  | SongListRequest
+  | SongListSuccess
+  | SongSaveRequest
+  | SongSaveSuccess;
 
 function GetSongRequest(uid: string): SongListRequest {
   return {
@@ -28,7 +41,43 @@ function GetSongSuccess(songList: SongData[]): SongListSuccess {
   };
 }
 
-export function fetchPosts(uid: string) {
+function GetSongSaveRequest(songData: SongData): SongSaveRequest {
+  return {
+    type: "@APP/SONG_STORE/REQUEST",
+    songData: { ...songData }
+  };
+}
+
+function GetSongSaveSucess(): SongSaveSuccess {
+  return {
+    type: "@APP/SONG_STORE/SUCCESS"
+  };
+}
+export function saveSong(dispatch: Dispatch<any>) {
+  return function(songData: SongData) {
+    dispatch(GetSongSaveRequest(songData));
+
+    // The function called by the thunk middleware can return a value,
+    // that is passed on as the return value of the dispatch method.
+
+    // In this case, we return a promise to wait for.
+    // This is not required by thunk middleware, but it is convenient for us.
+    const currentUser = firebase.auth().currentUser;
+
+    if (currentUser) {
+      firebase
+        .firestore()
+        .collection(`users/${currentUser.uid}/chords`)
+        .doc(songData.id)
+        .set(songData)
+        .then(function() {
+          dispatch(GetSongSaveSucess());
+        });
+    }
+  };
+}
+
+export function fetchSongs(uid: string) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
@@ -36,9 +85,10 @@ export function fetchPosts(uid: string) {
   return function(dispatch: Dispatch<any>) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
-
-    dispatch(GetSongRequest(uid));
-
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      dispatch(GetSongRequest(currentUser.uid));
+    }
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
 

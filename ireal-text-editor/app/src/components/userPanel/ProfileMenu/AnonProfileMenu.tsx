@@ -40,7 +40,7 @@ class AnonProfileMenu extends React.Component {
           />
         </div>
         <div>
-          <Button raised onClick={this.loginHandle}>
+          <Button variant='raised' onClick={this.loginHandle}>
             I don't wanna be a stranger
           </Button>
         </div>

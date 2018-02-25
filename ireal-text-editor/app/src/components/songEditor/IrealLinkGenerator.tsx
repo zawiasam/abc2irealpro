@@ -5,6 +5,8 @@ import * as firebase from "firebase";
 import "@firebase/firestore";
 import { Snackbar, IconButton } from "material-ui";
 import CloseIcon from "material-ui-icons/Close";
+import { uuidv4 } from "@ireal-text-editor/lib";
+import { SongEditorContainer } from "./SongEditorContainer";
 
 type SnackbarType = "success" | "error";
 
@@ -60,7 +62,7 @@ class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
       firebase
         .firestore()
         .collection(`users/${currentUser.uid}/chords`)
-        .doc(songData.title)
+        .doc(songData.id)
         .set(songData)
         .then(function() {
           component.setState({
@@ -87,10 +89,7 @@ class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
   render() {
     return (
       <div>
-        <SongEditor
-          onChange={this.handleSongChange}
-          onSave={this.handleSongSave}
-        />
+        <SongEditorContainer />
         <Snackbar
           anchorOrigin={{ horizontal: "center", vertical: "top" }}
           open={this.state.snackbarVisible}

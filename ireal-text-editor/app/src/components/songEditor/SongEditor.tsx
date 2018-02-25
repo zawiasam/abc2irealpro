@@ -14,25 +14,16 @@ const linkContainerStyle = {
 };
 
 interface SongEditorState extends SongData {}
-interface SongEditorProps {
-  onChange: (value: SongEditorState) => void;
-  onSave: (value: SongEditorState) => void;
+export interface SongEditorProps {
+  defaultValue: SongData;
+  onChange: (value: SongData) => void;
+  onSave: (value: SongData) => void;
 }
 class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   constructor(props: SongEditorProps) {
     super(props);
 
-    this.state = {
-      title: "My song",
-      composer: "Unknown Composer",
-      style: "Medium Swing",
-      keySignature: "C",
-      transpostion: "n",
-      measure: "4/4",
-      id: null,
-      song:
-        "....|....|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb7...|....|F.G-.|.F,Bb.|..Eb7.|....|..G-.|..Bb.|..Eb.|....|F.G-.|...Bb|....|Eb...|..Bb.|Eb..F|G-...|F...|Bb...|Eb...|F.G-.|Dsus4...|D...|Eb..F|G-...|F...|Bb...|Eb..F|G-...|Eb...|....|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-...|Bb...|Eb7...|...F|.G-.F|.Bb..|.Eb7..|....|G-.F.|Bb...|....|....|"
-    };
+    this.state = { ...props.defaultValue };
     this.handleSongChange = this.handleSongChange.bind(this);
     this.handleSongInfoChange = this.handleSongInfoChange.bind(this);
   }
@@ -52,7 +43,7 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
       this.props.onSave({ ...this.state, song: text });
     }
   };
-  
+
   render() {
     return (
       <div style={styles}>

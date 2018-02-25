@@ -18,7 +18,7 @@ export interface SongData {
   transpostion: string;
   measure: string;
   song: string;
-  id: string | null;
+  id: string;
 }
 
 export { UserInfo };

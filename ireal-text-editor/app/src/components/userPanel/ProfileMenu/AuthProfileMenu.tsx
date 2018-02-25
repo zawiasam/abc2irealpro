@@ -21,7 +21,7 @@ class AuthProfileMenu extends React.Component<ProfileMenuAuthProps> {
           />
         </div>
         <div>
-          <Button raised onClick={this.logoutHandle} >Logout</Button>
+          <Button variant='raised' onClick={this.logoutHandle} >Logout</Button>
         </div>
       </div>
     );

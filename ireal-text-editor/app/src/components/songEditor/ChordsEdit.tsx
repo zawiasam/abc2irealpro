@@ -103,7 +103,7 @@ class ChordEditBox extends React.Component<
         </div>
         <div>
           <Button
-            raised
+            variant='raised'
             color="primary"
             onClick={this.handleSave}
             style={style}
@@ -111,17 +111,17 @@ class ChordEditBox extends React.Component<
             save
           </Button>
           <Button
-            raised
+            variant='raised'
             color="secondary"
             onClick={this.handleSubmit}
             style={style}
           >
             generate song
           </Button>
-          <Button raised onClick={this.handlePrettify} style={style}>
+          <Button variant='raised' onClick={this.handlePrettify} style={style}>
             prettify a little
           </Button>
-          <Button raised onClick={this.clearText} style={style}>
+          <Button variant='raised' onClick={this.clearText} style={style}>
             clear
           </Button>
         </div>
