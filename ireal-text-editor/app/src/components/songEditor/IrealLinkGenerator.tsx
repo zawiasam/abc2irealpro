@@ -8,15 +8,7 @@ import CloseIcon from "material-ui-icons/Close";
 import { uuidv4 } from "@ireal-text-editor/lib";
 import { SongEditorContainer } from "./SongEditorContainer";
 
-type SnackbarType = "success" | "error";
-
-interface IrealLinkGeneratorState {
-  snackbarMessage: string;
-  snackbarVisible: boolean;
-  snackbarType: SnackbarType;
-}
-
-class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
+class IrealLinkGenerator extends React.Component<{}> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -26,7 +18,7 @@ class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
     };
   }
 
-  encodeLink = (songInfo: SongData) => {
+  public encodeLink = (songInfo: SongData) => {
     let header = [
       songInfo.title,
       songInfo.composer,
@@ -50,44 +42,15 @@ class IrealLinkGenerator extends React.Component<{}, IrealLinkGeneratorState> {
     }
   };
 
-  handleSongChange = (song: SongData) => {
+  public handleSongChange = (song: SongData) => {
     const url = this.encodeLink(song);
     url && window.open(url, "_blank");
   };
 
-  render() {
+  public render() {
     return (
       <div>
         <SongEditorContainer />
-        <Snackbar
-          anchorOrigin={{ horizontal: "center", vertical: "top" }}
-          open={this.state.snackbarVisible}
-          onClose={() => {
-            this.setState({ snackbarVisible: false });
-          }}
-          autoHideDuration={
-            this.state.snackbarType === "success" ? undefined : 6000
-          }
-          SnackbarContentProps={{
-            style: {
-              backgroundColor:
-                this.state.snackbarType === "success" ? "green" : "red"
-            }
-          }}
-          message={<span id="message-id">{this.state.snackbarMessage}</span>}
-          action={[
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              onClick={() => {
-                this.setState({ snackbarVisible: false });
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-          ]}
-        />
       </div>
     );
   }
