@@ -1,6 +1,7 @@
 import { Action, Dispatch } from "redux";
 import { UserInfo, SongData } from "@ireal-text-editor/models";
 import * as firebase from "firebase";
+import "@firebase/firestore";
 import { ShowNotificationCreate } from "./notificationActions";
 
 interface SongListRequest extends Action {
@@ -93,36 +94,39 @@ export function saveSong(dispatch: Dispatch<any>) {
   };
 }
 
-export function fetchSongs(uid: string) {
+export function fetchSongs(dispatch: Dispatch<any>) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function(dispatch: Dispatch<any>) {
+  return function() {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
       dispatch(GetSongRequest(currentUser.uid));
-    }
-    // The function called by the thunk middleware can return a value,
-    // that is passed on as the return value of the dispatch method.
+      // The function called by the thunk middleware can return a value,
+      // that is passed on as the return value of the dispatch method.
 
-    // In this case, we return a promise to wait for.
-    // This is not required by thunk middleware, but it is convenient for us.
+      // In this case, we return a promise to wait for.
+      // This is not required by thunk middleware, but it is convenient for us.
 
-    return firebase
-      .firestore()
-      .collection(`users/${uid}/chords`)
-      .get()
-      .then(function(snap) {
-        snap.forEach(function(doc) {
-          console.log(doc.id, " => ", doc.data());
+      firebase
+        .firestore()
+        .collection(`users/${currentUser.uid}/chords`)
+        .get()
+        .then(function(snap) {
+          let songList: SongData[] = [];
+          snap.forEach(function(doc) {
+            // console.log(doc.id, " => ", doc.data());
+            songList.push(doc.data() as SongData);
+          });
+          dispatch(GetSongSuccess(songList));
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
         });
-      })
-      .catch(function(error) {
-        console.log("Error getting document:", error);
-      });
+    }
 
     // fetch(`https://www.reddit.com/r/${subreddit}.json`)
     //   .then(

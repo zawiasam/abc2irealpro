@@ -60,12 +60,12 @@ const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
 }) => {
   return (
     <div>
-    <Panel
-      userInfo={userInfo}
-      isAuthorized={isAuthorized}
-      dispatch={dispatch}
-    />
-    <NotificationContainer />
+      <Panel
+        userInfo={userInfo}
+        isAuthorized={isAuthorized}
+        dispatch={dispatch}
+      />
+      <NotificationContainer />
     </div>
   );
 };

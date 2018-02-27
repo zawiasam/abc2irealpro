@@ -7,19 +7,8 @@ export function SongReducer(
   action: SongActions
 ): SongData[] {
   switch (action.type) {
-    case "@APP/SONG_LIST/REQUEST":
-      return [
-        {
-          composer: "Maciej",
-          title: "Hit",
-          keySignature: "C",
-          measure: "4/4",
-          song: "",
-          style: "style",
-          transpostion: "n",
-          id: uuidv4()
-        }
-      ];
+    case "@APP/SONG_LIST/SUCCESS":
+      return [...action.songList];
     default:
       return [...state];
   }
