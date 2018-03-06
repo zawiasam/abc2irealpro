@@ -37,7 +37,7 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
 
   componentWillReceiveProps(nextProps: SongEditorProps) {
     if (nextProps.defaultValue !== this.props.defaultValue) {
-      this.state = { ...nextProps.defaultValue };
+      this.setState( { ...nextProps.defaultValue });
     } else if (nextProps.songId !== this.props.songId || !nextProps.songId) {
       this.props.onSongDownload(nextProps.songId || '');
     }
