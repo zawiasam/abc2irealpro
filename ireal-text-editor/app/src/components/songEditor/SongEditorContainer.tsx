@@ -1,9 +1,14 @@
 import * as React from "react";
 import { SongEditor, SongEditorProps } from "./SongEditor";
 import { RootState, SongData } from "@ireal-text-editor/models";
-import { fetchSongs, saveSong } from "@ireal-text-editor/redux-actions";
+import {
+  fetchSongs,
+  saveSong,
+  fetchSong
+} from "@ireal-text-editor/redux-actions";
 import { DispatchProp, connect, Dispatch } from "react-redux";
 import { uuidv4 } from "@ireal-text-editor/lib";
+import { RouteComponentProps } from "react-router";
 
 const getDefaultSongValue = () => {
   return {
@@ -19,17 +24,22 @@ const getDefaultSongValue = () => {
   };
 };
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: RootState, ownProps: RouteComponentProps<any>) {
+  console.log("map: ", ownProps.match.params);
   return {
-    defaultValue: state.songList[0] || getDefaultSongValue()
+    defaultValue: state.songList[0] || getDefaultSongValue(),
+    songId: ownProps.match.params.id
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
     onChange: saveSong(dispatch),
-    onSave: saveSong(dispatch)
+    onSave: saveSong(dispatch),
+    onSongDownload: fetchSong(dispatch)
   };
 }
 
-export const SongEditorContainer  = connect(mapStateToProps, mapDispatchToProps)(SongEditor);
+export const SongEditorContainer = connect(mapStateToProps, mapDispatchToProps)(
+  SongEditor
+);

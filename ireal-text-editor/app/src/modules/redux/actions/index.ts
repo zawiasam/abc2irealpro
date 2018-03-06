@@ -1,9 +1,10 @@
 import { UserLogin, UserLogout, AuthActions } from "./authActions";
 import {
-  GetSongRequest,
+  GetSongListRequest,
   SongActions,
   fetchSongs,
-  saveSong
+  saveSong,
+  fetchSong,
 } from "./songActions";
 import {
   ShowNotificationCreate,
@@ -11,6 +12,6 @@ import {
 } from "./notificationActions";
 
 export { UserLogin, UserLogout, AuthActions };
-export { GetSongRequest, SongActions, fetchSongs, saveSong };
+export { GetSongListRequest, SongActions, fetchSongs, saveSong, fetchSong };
 
 export { ShowNotificationCreate, NotificationActions };

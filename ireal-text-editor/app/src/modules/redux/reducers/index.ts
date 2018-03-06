@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import { AuthReducer } from "./authReducer";
-import { SongReducer } from "./songReducer";
+import { SongListReducer } from "./songListReducer";
 import { NotificationReducer } from "./notificationReducer";
 
 const rootReducer = combineReducers({
   authState: AuthReducer,
-  songList: SongReducer,
+  songList: SongListReducer,
   notification: NotificationReducer
 });
 

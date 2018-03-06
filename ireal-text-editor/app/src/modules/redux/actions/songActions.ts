@@ -3,6 +3,16 @@ import { UserInfo, SongData } from "@ireal-text-editor/models";
 import * as firebase from "firebase";
 import "@firebase/firestore";
 import { ShowNotificationCreate } from "./notificationActions";
+interface FetchSongRequest extends Action {
+  type: "@APP/FETCH_SONG/REQUEST";
+  uid: string;
+  songId: string;
+}
+
+interface FetchSongSuccess extends Action {
+  type: "@APP/FETCH_SONG/SUCCESS";
+  song: SongData;
+}
 
 interface SongListRequest extends Action {
   type: "@APP/SONG_LIST/REQUEST";
@@ -27,16 +37,33 @@ type SongActions =
   | SongListRequest
   | SongListSuccess
   | SongSaveRequest
-  | SongSaveSuccess;
+  | SongSaveSuccess
+  | FetchSongRequest
+  | FetchSongSuccess;
 
-function GetSongRequest(uid: string): SongListRequest {
+  function GetFetchSongRequest(uid: string, songId: string): FetchSongRequest {
+    return {
+      type: "@APP/FETCH_SONG/REQUEST",
+      uid: uid,
+      songId: songId
+    };
+  }
+  
+  function GetFetchSongSuccess(song: SongData): FetchSongSuccess {
+    return {
+      type: "@APP/FETCH_SONG/SUCCESS",
+      song: song
+    };
+  }
+  
+function GetSongListRequest(uid: string): SongListRequest {
   return {
     type: "@APP/SONG_LIST/REQUEST",
     uid: uid
   };
 }
 
-function GetSongSuccess(songList: SongData[]): SongListSuccess {
+function GetSongListSuccess(songList: SongData[]): SongListSuccess {
   return {
     type: "@APP/SONG_LIST/SUCCESS",
     songList: songList || []
@@ -55,6 +82,7 @@ function GetSongSaveSucess(): SongSaveSuccess {
     type: "@APP/SONG_STORE/SUCCESS"
   };
 }
+
 export function saveSong(dispatch: Dispatch<any>) {
   return function(songData: SongData) {
     dispatch(GetSongSaveRequest(songData));
@@ -87,9 +115,31 @@ export function saveSong(dispatch: Dispatch<any>) {
         ShowNotificationCreate({
           autoclose: false,
           type: "failure",
-          message: "Stanger is not allowed to preform this action!"
+          message: "Stranger is not allowed to preform this action!"
         })
       );
+    }
+  };
+}
+
+export function fetchSong(dispatch: Dispatch<any>) {
+  return function(songId: string) {
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      dispatch(GetFetchSongRequest(currentUser.uid, songId));
+      // The function called by the thunk middleware can return a value,
+      // that is passed on as the return value of the dispatch method.
+
+      // In this case, we return a promise to wait for.
+      // This is not required by thunk middleware, but it is convenient for us.
+
+      firebase
+        .firestore()
+        .doc(`users/${currentUser.uid}/chords/${songId}`)
+        .get()
+        .then(d => {
+          dispatch(GetFetchSongSuccess(d.data() as SongData));
+        })
     }
   };
 }
@@ -104,7 +154,7 @@ export function fetchSongs(dispatch: Dispatch<any>) {
     // that the API call is starting.
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
-      dispatch(GetSongRequest(currentUser.uid));
+      dispatch(GetSongListRequest(currentUser.uid));
       // The function called by the thunk middleware can return a value,
       // that is passed on as the return value of the dispatch method.
 
@@ -121,7 +171,7 @@ export function fetchSongs(dispatch: Dispatch<any>) {
             // console.log(doc.id, " => ", doc.data());
             songList.push(doc.data() as SongData);
           });
-          dispatch(GetSongSuccess(songList));
+          dispatch(GetSongListSuccess(songList));
         })
         .catch(function(error) {
           console.log("Error getting document:", error);
@@ -146,4 +196,4 @@ export function fetchSongs(dispatch: Dispatch<any>) {
   };
 }
 
-export { GetSongRequest, SongActions };
+export { GetSongListRequest, SongActions };

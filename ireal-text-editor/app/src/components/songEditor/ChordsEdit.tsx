@@ -28,6 +28,12 @@ class ChordEditBox extends React.Component<
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps: ChordEditBoxProps) {
+    if (nextProps.song !== this.state.chordsText) {
+      this.setState({ chordsText: nextProps.song });
+    }
+  }
+
   clearText() {
     const emptySong = "";
     this.setState({
@@ -93,17 +99,17 @@ class ChordEditBox extends React.Component<
             label="Chords"
             multiline
             rows="4"
-            defaultValue="Default Value"
+            defaultValue={this.props.song}
             margin="normal"
             onChange={this.handleChange}
             fullWidth={true}
-            InputProps={{style: textFieldSytle}}
+            InputProps={{ style: textFieldSytle }}
             value={this.state.chordsText}
           />
         </div>
         <div>
           <Button
-            variant='raised'
+            variant="raised"
             color="primary"
             onClick={this.handleSave}
             style={style}
@@ -111,17 +117,17 @@ class ChordEditBox extends React.Component<
             save
           </Button>
           <Button
-            variant='raised'
+            variant="raised"
             color="secondary"
             onClick={this.handleSubmit}
             style={style}
           >
             generate song
           </Button>
-          <Button variant='raised' onClick={this.handlePrettify} style={style}>
+          <Button variant="raised" onClick={this.handlePrettify} style={style}>
             prettify a little
           </Button>
-          <Button variant='raised' onClick={this.clearText} style={style}>
+          <Button variant="raised" onClick={this.clearText} style={style}>
             clear
           </Button>
         </div>

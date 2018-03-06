@@ -1,5 +1,6 @@
 import * as React from "react";
 import { SongData } from "@ireal-text-editor/models";
+import { Link } from "react-router-dom";
 
 interface SongListProps {
   songs: SongData[];
@@ -26,7 +27,7 @@ class SongList extends React.Component<SongListProps> {
         <ul>
           {songs &&
             songs.map(song => {
-              return <li key={song.id}>{song.title}</li>;
+              return <li key={song.id}><Link to={`/editor/${song.id}`}>{song.title}</Link> </li>;
             })}
         </ul>
       </div>

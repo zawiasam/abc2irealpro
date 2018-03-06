@@ -34,7 +34,7 @@ interface SongInfoState {
   transpostion: string;
 }
 
-class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<string>> {
+class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<string>, SongInfoState> {
   constructor(props: SongInfoProps & WithStyles<string>) {
     super(props);
     this.state = {
@@ -44,24 +44,29 @@ class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<strin
     this.doChanged = this.doChanged.bind(this);
   }
 
+  componentWillReceiveProps(nextProps: SongInfoProps) {
+      this.setState({ ...nextProps.defaultValue });
+  }
+
   doChanged(value: Partial<SongInfoState>) {
-    const state = { ...this.state, ...value } as SongInfoState;
+    const state = {  ...value } as SongInfoState;
     if (this.props.onChange) {
       this.props.onChange(state);
     }
 
-    this.setState(value);
+    this.setState(state);
   }
 
   render() {
-    const defaultValue = this.props.defaultValue;
+    const defaultValue = this.state;
     const { classes } = this.props;
 
     return (
       <div style={{ display: "block" }}>
         <TextField
           className={classes.textField}
-          defaultValue={defaultValue.composer || ""}
+          defaultValue={this.props.defaultValue.composer}
+          value={defaultValue.composer}
           fullWidth={true}
           label="Composer"
           onChange={event => {
@@ -71,31 +76,31 @@ class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<strin
         <br />
         <TextField
           className={classes.textField}
-          defaultValue={defaultValue.title || ""}
+          value={defaultValue.title}
           fullWidth={true}
           label="Title"
-          onChange={event => {
-            this.doChanged({ title: event.currentTarget.value });
-          }}
+          // onChange={event => {
+          //   this.doChanged({ title: event.currentTarget.value });
+          // }}
         />
         <br />
         <TextField
           className={classes.textField}
-          value={defaultValue.style || ""}
+          value={defaultValue.style}
           fullWidth={true}
           label="Style"
         />
         <br />
         <TextField
           className={classes.textField}
-          value={defaultValue.measure || ""}
+          value={defaultValue.measure}
           fullWidth={true}
           label="Measure"
         />
         <br />
         <TextField
           className={classes.textField}
-          value={defaultValue.keySignature || ""}
+          value={defaultValue.keySignature}
           fullWidth={true}
           label="Key"
         />

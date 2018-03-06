@@ -9,6 +9,7 @@ import * as firebase from "firebase";
 import appConfig from "app-config";
 
 import { IrealLinkGenerator } from "./components/songEditor/IrealLinkGenerator";
+import { SongEditorContainer } from "./components/songEditor/SongEditorContainer";
 import { Panel } from "./components/userPanel/Panel";
 import { SongList } from "./components/songList";
 import { configureStore } from "@ireal-text-editor/redux-store";
@@ -30,7 +31,7 @@ class App extends React.Component {
       <Router>
         <div>
           <Panel />
-          <Route exact path="/" component={IrealLinkGenerator} />
+          <Route path="/editor/:id?" component={SongEditorContainer} />
           <Route exact path="/songList" component={SongList} />
         </div>
       </Router>

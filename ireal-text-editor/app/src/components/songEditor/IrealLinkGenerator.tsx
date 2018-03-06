@@ -5,18 +5,10 @@ import { Snackbar, IconButton } from "material-ui";
 import CloseIcon from "material-ui-icons/Close";
 import { uuidv4 } from "@ireal-text-editor/lib";
 import { SongEditorContainer } from "./SongEditorContainer";
+import { RouteComponentProps } from "react-router";
 
-class IrealLinkGenerator extends React.Component<{}> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      snackbarMessage: "",
-      snackbarVisible: false,
-      snackbarType: "success"
-    };
-  }
-
-  public encodeLink = (songInfo: SongData) => {
+const IrealLinkGenerator: React.SFC<RouteComponentProps<any>> = (props) => {
+  let encodeLink = (songInfo: SongData) => {
     let header = [
       songInfo.title,
       songInfo.composer,
@@ -40,18 +32,16 @@ class IrealLinkGenerator extends React.Component<{}> {
     }
   };
 
-  public handleSongChange = (song: SongData) => {
-    const url = this.encodeLink(song);
+  let handleSongChange = (song: SongData) => {
+    const url = encodeLink(song);
     url && window.open(url, "_blank");
   };
 
-  public render() {
-    return (
-      <div>
-        <SongEditorContainer />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <SongEditorContainer {...props}/>
+    </div>
+  );
+};
 
 export { IrealLinkGenerator };

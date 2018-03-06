@@ -16,9 +16,12 @@ const linkContainerStyle = {
 interface SongEditorState extends SongData {}
 export interface SongEditorProps {
   defaultValue: SongData;
+  songId: string | undefined;
   onChange: (value: SongData) => void;
   onSave: (value: SongData) => void;
+  onSongDownload: (songId: string) => void;
 }
+
 class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   constructor(props: SongEditorProps) {
     super(props);
@@ -26,8 +29,16 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
     this.state = { ...props.defaultValue };
     this.handleSongChange = this.handleSongChange.bind(this);
     this.handleSongInfoChange = this.handleSongInfoChange.bind(this);
+
+    if (props.songId && props.onSongDownload) {
+      props.onSongDownload(props.songId);
+    }
   }
 
+  componentWillReceiveProps(nextProps: SongEditorProps) {
+    this.state = { ...nextProps.defaultValue };    
+  }
+  
   handleSongInfoChange(songInfo: Partial<SongEditorState>) {
     this.setState(songInfo as SongEditorState);
   }
@@ -45,16 +56,18 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   };
 
   render() {
+    console.log("render");
+    const defaultSongData = { ...this.state };
     return (
       <div style={styles}>
         <SongInfo
           defaultValue={{
-            title: "My song",
-            composer: "Unknown Composer",
-            style: "Medium Swing",
-            keySignature: "C",
-            transpostion: "n",
-            measure: "4/4"
+            title: defaultSongData.title,
+            composer: defaultSongData.composer,
+            style: defaultSongData.style,
+            keySignature: defaultSongData.keySignature,
+            transpostion: defaultSongData.transpostion,
+            measure: defaultSongData.measure
           }}
           onChange={this.handleSongInfoChange}
         />
@@ -62,7 +75,7 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
           <ChordEditBox
             onSubmit={this.handleSongChange}
             onSave={this.handleSongSave}
-            song={this.state.song}
+            song={defaultSongData.song}
           />
           <pre>x - repeat one prev. chord</pre>
           <pre>% - repeat two prev. chords</pre>
