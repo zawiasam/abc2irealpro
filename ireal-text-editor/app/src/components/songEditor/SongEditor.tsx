@@ -36,9 +36,11 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   }
 
   componentWillReceiveProps(nextProps: SongEditorProps) {
-    this.state = { ...nextProps.defaultValue };    
+    if (nextProps.defaultValue !== this.props.defaultValue) {
+      this.state = { ...nextProps.defaultValue };
+    }
   }
-  
+
   handleSongInfoChange(songInfo: Partial<SongEditorState>) {
     this.setState(songInfo as SongEditorState);
   }

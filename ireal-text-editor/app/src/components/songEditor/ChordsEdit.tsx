@@ -29,7 +29,7 @@ class ChordEditBox extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: ChordEditBoxProps) {
-    if (nextProps.song !== this.state.chordsText) {
+    if (nextProps.song !== this.props.song) {
       this.setState({ chordsText: nextProps.song });
     }
   }

@@ -1,9 +1,16 @@
 import * as React from "react";
 import { TextField, WithStyles } from "material-ui";
-import { withStyles, Theme, StyleRules, StyleRulesCallback } from "material-ui/styles";
+import {
+  withStyles,
+  Theme,
+  StyleRules,
+  StyleRulesCallback
+} from "material-ui/styles";
 import { ClassNameMap } from "material-ui/styles/withStyles";
 
-const styles: StyleRules<string> | StyleRulesCallback<string> = (theme: Theme) => ({
+const styles: StyleRules<string> | StyleRulesCallback<string> = (
+  theme: Theme
+) => ({
   container: {
     display: "flex",
     flexWrap: "wrap"
@@ -34,7 +41,10 @@ interface SongInfoState {
   transpostion: string;
 }
 
-class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<string>, SongInfoState> {
+class SongInfoComponent extends React.Component<
+  SongInfoProps & WithStyles<string>,
+  SongInfoState
+> {
   constructor(props: SongInfoProps & WithStyles<string>) {
     super(props);
     this.state = {
@@ -45,11 +55,13 @@ class SongInfoComponent extends React.Component<SongInfoProps & WithStyles<strin
   }
 
   componentWillReceiveProps(nextProps: SongInfoProps) {
+    if (nextProps.defaultValue !== this.props.defaultValue) {
       this.setState({ ...nextProps.defaultValue });
+    }
   }
 
   doChanged(value: Partial<SongInfoState>) {
-    const state = {  ...value } as SongInfoState;
+    const state = { ...value } as SongInfoState;
     if (this.props.onChange) {
       this.props.onChange(state);
     }
