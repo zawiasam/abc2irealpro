@@ -17,6 +17,7 @@ export interface RootState {
   authState: AuthState;
   songList: SongData[];
   notification: NotificationModel;
+  selectedSong: SongData;
 }
 
 export interface SongData {

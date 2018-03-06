@@ -1,7 +1,10 @@
 import { Action, Dispatch } from "redux";
 import { UserInfo, SongData } from "@ireal-text-editor/models";
-import * as firebase from "firebase";
-import "@firebase/firestore";
+import { uuidv4 } from "@ireal-text-editor/lib";
+
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+
 import { ShowNotificationCreate } from "./notificationActions";
 interface FetchSongRequest extends Action {
   type: "@APP/FETCH_SONG/REQUEST";
@@ -41,21 +44,21 @@ type SongActions =
   | FetchSongRequest
   | FetchSongSuccess;
 
-  function GetFetchSongRequest(uid: string, songId: string): FetchSongRequest {
-    return {
-      type: "@APP/FETCH_SONG/REQUEST",
-      uid: uid,
-      songId: songId
-    };
-  }
-  
-  function GetFetchSongSuccess(song: SongData): FetchSongSuccess {
-    return {
-      type: "@APP/FETCH_SONG/SUCCESS",
-      song: song
-    };
-  }
-  
+function GetFetchSongRequest(uid: string, songId: string): FetchSongRequest {
+  return {
+    type: "@APP/FETCH_SONG/REQUEST",
+    uid: uid,
+    songId: songId
+  };
+}
+
+function GetFetchSongSuccess(song: SongData): FetchSongSuccess {
+  return {
+    type: "@APP/FETCH_SONG/SUCCESS",
+    song: song
+  };
+}
+
 function GetSongListRequest(uid: string): SongListRequest {
   return {
     type: "@APP/SONG_LIST/REQUEST",
@@ -122,6 +125,20 @@ export function saveSong(dispatch: Dispatch<any>) {
   };
 }
 
+const getDefaultSongValue = () => {
+  return {
+    title: "New song",
+    composer: "Unknown Composer",
+    style: "Medium Swing",
+    keySignature: "C",
+    transpostion: "n",
+    measure: "4/4",
+    id: uuidv4(),
+    song:
+      "....|....|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|..F.|G-...|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|....|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb...|..F.|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-..F|Bb...|Eb7...|....|F.G-.|.F,Bb.|..Eb7.|....|..G-.|..Bb.|..Eb.|....|F.G-.|...Bb|....|Eb...|..Bb.|Eb..F|G-...|F...|Bb...|Eb...|F.G-.|Dsus4...|D...|Eb..F|G-...|F...|Bb...|Eb..F|G-...|Eb...|....|G-..F|Bb...|Eb7...|..F.|G-..F|Bb...|Eb7...|....|G-...|Bb...|Eb7...|...F|.G-.F|.Bb..|.Eb7..|....|G-.F.|Bb...|....|....|"
+  };
+};
+
 export function fetchSong(dispatch: Dispatch<any>) {
   return function(songId: string) {
     const currentUser = firebase.auth().currentUser;
@@ -132,14 +149,17 @@ export function fetchSong(dispatch: Dispatch<any>) {
 
       // In this case, we return a promise to wait for.
       // This is not required by thunk middleware, but it is convenient for us.
-
-      firebase
-        .firestore()
-        .doc(`users/${currentUser.uid}/chords/${songId}`)
-        .get()
-        .then(d => {
-          dispatch(GetFetchSongSuccess(d.data() as SongData));
-        })
+      if (songId) {
+        firebase
+          .firestore()
+          .doc(`users/${currentUser.uid}/chords/${songId}`)
+          .get()
+          .then(d => {
+            dispatch(GetFetchSongSuccess(d.data() as SongData));
+          });
+      } else {
+        dispatch(GetFetchSongSuccess(getDefaultSongValue()));
+      }
     }
   };
 }

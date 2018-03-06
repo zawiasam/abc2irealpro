@@ -30,14 +30,16 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
     this.handleSongChange = this.handleSongChange.bind(this);
     this.handleSongInfoChange = this.handleSongInfoChange.bind(this);
 
-    if (props.songId && props.onSongDownload) {
-      props.onSongDownload(props.songId);
+    if (props.onSongDownload) {
+      props.onSongDownload(props.songId || '');
     }
   }
 
   componentWillReceiveProps(nextProps: SongEditorProps) {
     if (nextProps.defaultValue !== this.props.defaultValue) {
       this.state = { ...nextProps.defaultValue };
+    } else if (nextProps.songId !== this.props.songId || !nextProps.songId) {
+      this.props.onSongDownload(nextProps.songId || '');
     }
   }
 
