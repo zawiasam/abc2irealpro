@@ -7,3 +7,6 @@ Best sources & software
   * http://dev.music.free.fr/
   * https://www.dokuwiki.org/plugin:abc
   * https://abcjs.net/
+* Music sites
+ * http://x-minus.pro
+ * http://flat.io
