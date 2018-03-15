@@ -36,13 +36,18 @@ interface SongSaveSuccess extends Action {
   type: "@APP/SONG_STORE/SUCCESS";
 }
 
+interface SongClearAction extends Action {
+  type: "@APP/SONG_CLEAR"
+}
+
 type SongActions =
   | SongListRequest
   | SongListSuccess
   | SongSaveRequest
   | SongSaveSuccess
   | FetchSongRequest
-  | FetchSongSuccess;
+  | FetchSongSuccess
+  | SongClearAction;
 
 function GetFetchSongRequest(uid: string, songId: string): FetchSongRequest {
   return {
@@ -83,6 +88,12 @@ function GetSongSaveRequest(songData: SongData): SongSaveRequest {
 function GetSongSaveSucess(): SongSaveSuccess {
   return {
     type: "@APP/SONG_STORE/SUCCESS"
+  };
+}
+
+export function SongClear() : SongClearAction {
+  return {
+    type: "@APP/SONG_CLEAR"
   };
 }
 

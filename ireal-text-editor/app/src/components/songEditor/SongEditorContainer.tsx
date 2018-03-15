@@ -4,7 +4,8 @@ import { RootState, SongData } from "@ireal-text-editor/models";
 import {
   fetchSongs,
   saveSong,
-  fetchSong
+  fetchSong,
+  SongClear
 } from "@ireal-text-editor/redux-actions";
 import { DispatchProp, connect, Dispatch } from "react-redux";
 import { RouteComponentProps } from "react-router";
@@ -12,8 +13,7 @@ import { RouteComponentProps } from "react-router";
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<any>) {
   console.log("map: ", ownProps.match.params);
   return {
-    defaultValue:
-      state.selectedSong,
+    defaultValue: state.selectedSong,
     songId: ownProps.match.params.id
   };
 }
@@ -22,7 +22,10 @@ function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
     onChange: saveSong(dispatch),
     onSave: saveSong(dispatch),
-    onSongDownload: fetchSong(dispatch)
+    onSongDownload: (songId: string) => {
+      dispatch(SongClear());
+      return fetchSong(dispatch)(songId);
+    }
   };
 }
 
