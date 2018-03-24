@@ -2,13 +2,16 @@ import * as React from "react";
 
 import { SongList, SongListProps } from "./SongList";
 import { RootState } from "@ireal-text-editor/models";
-import { GetSongListRequest, fetchSongs } from "@ireal-text-editor/redux-actions";
+import {
+  GetSongListRequest,
+  fetchSongsAsync
+} from "@ireal-text-editor/redux-actions";
 import { connect, DispatchProp } from "react-redux";
 import { Dispatch } from "redux";
 
 function mapDispatchToProps(dispatch: Dispatch<any>, ownProps: SongListProps) {
   return {
-    getSongs: fetchSongs(dispatch)
+    getSongs: () => dispatch(fetchSongsAsync())
   };
 }
 

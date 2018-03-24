@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
 
@@ -14,18 +14,15 @@ import { Panel } from "./components/userPanel/Panel";
 import { SongList } from "./components/songList";
 import { configureStore } from "@ireal-text-editor/redux-store";
 
+export const store = configureStore({});
 firebase.initializeApp(appConfig);
-const store = configureStore();
+
 
 const linkContainerStyle = {
   margintop: "18px"
 };
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Router>

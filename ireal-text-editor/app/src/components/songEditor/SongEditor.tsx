@@ -16,7 +16,7 @@ const linkContainerStyle = {
 interface SongEditorState extends SongData {}
 export interface SongEditorProps {
   defaultValue: SongData;
-  songId: string | undefined;
+  songId: string | null;
   onChange: (value: SongData) => void;
   onSave: (value: SongData) => void;
   onSongDownload: (songId: string) => void;

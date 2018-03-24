@@ -1,11 +1,13 @@
 import { Action, Dispatch } from "redux";
-import { UserInfo, SongData } from "@ireal-text-editor/models";
+import { UserInfo, SongData, RootState } from "@ireal-text-editor/models";
 import { uuidv4 } from "@ireal-text-editor/lib";
 
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
 import { ShowNotificationCreate } from "./notificationActions";
+import { fbDocument } from "../firebaseRequest";
+import { getUserId } from "../selectors/authSelector";
 interface FetchSongRequest extends Action {
   type: "@APP/FETCH_SONG/REQUEST";
   uid: string;
@@ -37,7 +39,7 @@ interface SongSaveSuccess extends Action {
 }
 
 interface SongClearAction extends Action {
-  type: "@APP/SONG_CLEAR"
+  type: "@APP/SONG_CLEAR";
 }
 
 type SongActions =
@@ -91,49 +93,47 @@ function GetSongSaveSucess(): SongSaveSuccess {
   };
 }
 
-export function SongClear() : SongClearAction {
+export function SongClear(): SongClearAction {
   return {
     type: "@APP/SONG_CLEAR"
   };
 }
 
-export function saveSong(dispatch: Dispatch<any>) {
-  return function(songData: SongData) {
-    dispatch(GetSongSaveRequest(songData));
+export const saveSongAsync = (songData: SongData) => (dispatch: Dispatch<any>, getState: ()=>RootState) => {
+  dispatch(GetSongSaveRequest(songData));
 
-    // The function called by the thunk middleware can return a value,
-    // that is passed on as the return value of the dispatch method.
+  // The function called by the thunk middleware can return a value,
+  // that is passed on as the return value of the dispatch method.
 
-    // In this case, we return a promise to wait for.
-    // This is not required by thunk middleware, but it is convenient for us.
-    const currentUser = firebase.auth().currentUser;
+  // In this case, we return a promise to wait for.
+  // This is not required by thunk middleware, but it is convenient for us.
+  const userId = getUserId(getState());
 
-    if (currentUser) {
-      firebase
-        .firestore()
-        .collection(`users/${currentUser.uid}/chords`)
-        .doc(songData.id)
-        .set(songData)
-        .then(function() {
-          dispatch(GetSongSaveSucess());
-          dispatch(
-            ShowNotificationCreate({
-              autoclose: false,
-              type: "success",
-              message: "Document saved correctly"
-            })
-          );
-        });
-    } else {
-      dispatch(
-        ShowNotificationCreate({
-          autoclose: false,
-          type: "failure",
-          message: "Stranger is not allowed to preform this action!"
-        })
-      );
-    }
-  };
+  if (userId) {
+    firebase
+      .firestore()
+      .collection(`users/${userId}/chords`)
+      .doc(songData.id)
+      .set(songData)
+      .then(function() {
+        dispatch(GetSongSaveSucess());
+        dispatch(
+          ShowNotificationCreate({
+            autoclose: false,
+            type: "success",
+            message: "Document saved correctly"
+          })
+        );
+      });
+  } else {
+    dispatch(
+      ShowNotificationCreate({
+        autoclose: false,
+        type: "failure",
+        message: "Stranger is not allowed to preform this action!"
+      })
+    );
+  }
 }
 
 const getDefaultSongValue = () => {
@@ -149,24 +149,26 @@ const getDefaultSongValue = () => {
   };
 };
 
-export function fetchSong(dispatch: Dispatch<any>) {
-  return function(songId: string) {
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      dispatch(GetFetchSongRequest(currentUser.uid, songId));
+export function fetchSongAsync(songId: string) {
+  return (dispatch: Dispatch<any>, getState: () => RootState) => {
+    
+    const userId = getUserId(getState());
+    if (userId) {
+      dispatch(GetFetchSongRequest(userId, songId));
       // The function called by the thunk middleware can return a value,
       // that is passed on as the return value of the dispatch method.
 
       // In this case, we return a promise to wait for.
       // This is not required by thunk middleware, but it is convenient for us.
       if (songId) {
-        firebase
-          .firestore()
-          .doc(`users/${currentUser.uid}/chords/${songId}`)
-          .get()
-          .then(d => {
-            dispatch(GetFetchSongSuccess(d.data() as SongData));
-          });
+        let path = `users/${userId}/chords/${songId}`;
+        fbDocument<SongData>().fetch(
+          path,
+          result => {
+            dispatch(GetFetchSongSuccess(result));
+          },
+          () => {}
+        );
       } else {
         dispatch(GetFetchSongSuccess(getDefaultSongValue()));
       }
@@ -174,17 +176,16 @@ export function fetchSong(dispatch: Dispatch<any>) {
   };
 }
 
-export function fetchSongs(dispatch: Dispatch<any>) {
+export const fetchSongsAsync = () => (dispatch: Dispatch<any>, getState: ()=>RootState) => {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function() {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      dispatch(GetSongListRequest(currentUser.uid));
+    const userId = getUserId(getState());
+    if (userId) {
+      dispatch(GetSongListRequest(userId));
       // The function called by the thunk middleware can return a value,
       // that is passed on as the return value of the dispatch method.
 
@@ -193,7 +194,7 @@ export function fetchSongs(dispatch: Dispatch<any>) {
 
       firebase
         .firestore()
-        .collection(`users/${currentUser.uid}/chords`)
+        .collection(`users/${userId}/chords`)
         .get()
         .then(function(snap) {
           let songList: SongData[] = [];
@@ -223,7 +224,6 @@ export function fetchSongs(dispatch: Dispatch<any>) {
 
     //     dispatch(GetSongSuccess(json))
     //   );
-  };
 }
 
 export { GetSongListRequest, SongActions };

@@ -2,9 +2,9 @@ import * as React from "react";
 import { SongEditor, SongEditorProps } from "./SongEditor";
 import { RootState, SongData } from "@ireal-text-editor/models";
 import {
-  fetchSongs,
-  saveSong,
-  fetchSong,
+  fetchSongsAsync,
+  saveSongAsync,
+  fetchSongAsync,
   SongClear
 } from "@ireal-text-editor/redux-actions";
 import { DispatchProp, connect, Dispatch } from "react-redux";
@@ -20,11 +20,11 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<any>) {
 
 function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    onChange: saveSong(dispatch),
-    onSave: saveSong(dispatch),
+    onChange: (songData: SongData) => dispatch(saveSongAsync(songData)),
+    onSave: (songData: SongData) => dispatch(saveSongAsync(songData)),
     onSongDownload: (songId: string) => {
       dispatch(SongClear());
-      return fetchSong(dispatch)(songId);
+      dispatch(fetchSongAsync(songId));
     }
   };
 }
