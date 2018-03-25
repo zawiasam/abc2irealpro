@@ -5,9 +5,13 @@ import { uuidv4 } from "@ireal-text-editor/lib";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
-import { ShowNotificationCreate } from "./notificationActions";
-import { fbDocument } from "../firebaseRequest";
-import { getUserId } from "../selectors/authSelector";
+import {
+  ShowNotificationCreate,
+  GeneralFailNotificationCreate
+} from "./notificationActions";
+import { fb } from "../firebaseRequest";
+import { selectUserId } from "../selectors/authSelector";
+import { UserLogout } from "./authActions";
 interface FetchSongRequest extends Action {
   type: "@APP/FETCH_SONG/REQUEST";
   uid: string;
@@ -99,23 +103,30 @@ export function SongClear(): SongClearAction {
   };
 }
 
-export const saveSongAsync = (songData: SongData) => (dispatch: Dispatch<any>, getState: ()=>RootState) => {
+function getUserId(state: RootState, dispatch: Dispatch<any>): string | null {
+  const userId = selectUserId(state);
+  if (!userId) {
+    dispatch(UserLogout());
+  }
+
+  return userId;
+}
+
+export const saveSongAsync = (songData: SongData) => (
+  dispatch: Dispatch<any>,
+  getState: () => RootState
+) => {
+  const userId = getUserId(getState(), dispatch);
+  if (!userId) {
+    return;
+  }
   dispatch(GetSongSaveRequest(songData));
 
-  // The function called by the thunk middleware can return a value,
-  // that is passed on as the return value of the dispatch method.
-
-  // In this case, we return a promise to wait for.
-  // This is not required by thunk middleware, but it is convenient for us.
-  const userId = getUserId(getState());
-
-  if (userId) {
-    firebase
-      .firestore()
-      .collection(`users/${userId}/chords`)
-      .doc(songData.id)
-      .set(songData)
-      .then(function() {
+  fb<SongData>()
+    .collection(`users/${userId}/chords`)
+    .put(
+      { body: songData, id: songData.id },
+      () => {
         dispatch(GetSongSaveSucess());
         dispatch(
           ShowNotificationCreate({
@@ -124,17 +135,10 @@ export const saveSongAsync = (songData: SongData) => (dispatch: Dispatch<any>, g
             message: "Document saved correctly"
           })
         );
-      });
-  } else {
-    dispatch(
-      ShowNotificationCreate({
-        autoclose: false,
-        type: "failure",
-        message: "Stranger is not allowed to preform this action!"
-      })
+      },
+      () => dispatch(GeneralFailNotificationCreate())
     );
-  }
-}
+};
 
 const getDefaultSongValue = () => {
   return {
@@ -151,79 +155,46 @@ const getDefaultSongValue = () => {
 
 export function fetchSongAsync(songId: string) {
   return (dispatch: Dispatch<any>, getState: () => RootState) => {
-    
-    const userId = getUserId(getState());
-    if (userId) {
-      dispatch(GetFetchSongRequest(userId, songId));
-      // The function called by the thunk middleware can return a value,
-      // that is passed on as the return value of the dispatch method.
+    const userId = getUserId(getState(), dispatch);
+    if (!userId) {
+      return;
+    }
 
-      // In this case, we return a promise to wait for.
-      // This is not required by thunk middleware, but it is convenient for us.
-      if (songId) {
-        let path = `users/${userId}/chords/${songId}`;
-        fbDocument<SongData>().fetch(
-          path,
+    dispatch(GetFetchSongRequest(userId, songId));
+    if (songId) {
+      let path = `users/${userId}/chords/${songId}`;
+      fb<SongData>()
+        .document(path)
+        .get(
           result => {
             dispatch(GetFetchSongSuccess(result));
           },
-          () => {}
+          () => dispatch(GeneralFailNotificationCreate())
         );
-      } else {
-        dispatch(GetFetchSongSuccess(getDefaultSongValue()));
-      }
+    } else {
+      dispatch(GetFetchSongSuccess(getDefaultSongValue()));
     }
   };
 }
 
-export const fetchSongsAsync = () => (dispatch: Dispatch<any>, getState: ()=>RootState) => {
-  // Thunk middleware knows how to handle functions.
-  // It passes the dispatch method as an argument to the function,
-  // thus making it able to dispatch actions itself.
+export const fetchSongsAsync = () => (
+  dispatch: Dispatch<any>,
+  getState: () => RootState
+) => {
+  const userId = getUserId(getState(), dispatch);
+  if (!userId) {
+    return;
+  }
 
-    // First dispatch: the app state is updated to inform
-    // that the API call is starting.
-    const userId = getUserId(getState());
-    if (userId) {
-      dispatch(GetSongListRequest(userId));
-      // The function called by the thunk middleware can return a value,
-      // that is passed on as the return value of the dispatch method.
-
-      // In this case, we return a promise to wait for.
-      // This is not required by thunk middleware, but it is convenient for us.
-
-      firebase
-        .firestore()
-        .collection(`users/${userId}/chords`)
-        .get()
-        .then(function(snap) {
-          let songList: SongData[] = [];
-          snap.forEach(function(doc) {
-            // console.log(doc.id, " => ", doc.data());
-            songList.push(doc.data() as SongData);
-          });
-          dispatch(GetSongListSuccess(songList));
-        })
-        .catch(function(error) {
-          console.log("Error getting document:", error);
-        });
-    }
-
-    // fetch(`https://www.reddit.com/r/${subreddit}.json`)
-    //   .then(
-    //     response => response.json(),
-    //     // Do not use catch, because that will also catch
-    //     // any errors in the dispatch and resulting render,
-    //     // causing a loop of 'Unexpected batch number' errors.
-    //     // https://github.com/facebook/react/issues/6895
-    //     error => console.log("An error occurred.", error)
-    //   )
-    //   .then(json =>
-    //     // We can dispatch many times!
-    //     // Here, we update the app state with the results of the API call.
-
-    //     dispatch(GetSongSuccess(json))
-    //   );
-}
+  dispatch(GetSongListRequest(userId));
+  fb<SongData>()
+    .collection(`users/${userId}/chords`)
+    .get(
+      result => {
+        dispatch(GetSongListSuccess(result));
+      },
+      () => dispatch(GeneralFailNotificationCreate())
+    );
+};
 
 export { GetSongListRequest, SongActions };

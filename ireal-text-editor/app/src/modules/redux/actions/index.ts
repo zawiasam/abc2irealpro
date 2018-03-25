@@ -5,7 +5,7 @@ import {
   fetchSongsAsync,
   saveSongAsync,
   fetchSongAsync,
-  SongClear,
+  SongClear
 } from "./songActions";
 import {
   ShowNotificationCreate,
@@ -13,6 +13,13 @@ import {
 } from "./notificationActions";
 
 export { UserLogin, UserLogout, AuthActions };
-export { GetSongListRequest, SongActions, fetchSongsAsync, saveSongAsync, SongClear, fetchSongAsync };
+export {
+  GetSongListRequest,
+  SongActions,
+  fetchSongsAsync,
+  saveSongAsync,
+  SongClear,
+  fetchSongAsync
+};
 
 export { ShowNotificationCreate, NotificationActions };

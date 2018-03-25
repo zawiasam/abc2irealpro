@@ -15,6 +15,21 @@ function ShowNotificationCreate(
   };
 }
 
+function GeneralFailNotificationCreate(): ShowNotificationAction {
+  return {
+    type: "@APP/NOTIFY/SHOW",
+    notification: {
+      autoclose: false,
+      type: "failure",
+      message: "Something want wrong, sorry!, please contact me"
+    }
+  };
+}
+
 type NotificationActions = ShowNotificationAction;
 
-export { ShowNotificationCreate, NotificationActions };
+export {
+  ShowNotificationCreate,
+  NotificationActions,
+  GeneralFailNotificationCreate
+};
