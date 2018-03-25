@@ -13,7 +13,12 @@ export interface NotificationModel {
   autoclose: boolean;
 }
 
+export interface AppState {
+  loading: boolean;
+}
+
 export interface RootState {
+  appState: AppState;
   authState: AuthState;
   songList: SongData[];
   notification: NotificationModel;

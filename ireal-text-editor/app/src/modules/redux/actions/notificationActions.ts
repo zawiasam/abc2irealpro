@@ -21,7 +21,7 @@ function GeneralFailNotificationCreate(): ShowNotificationAction {
     notification: {
       autoclose: false,
       type: "failure",
-      message: "Something want wrong, sorry!, please contact me"
+      message: "Something went wrong, sorry!, please contact me."
     }
   };
 }

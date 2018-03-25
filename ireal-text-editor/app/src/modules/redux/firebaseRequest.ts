@@ -1,5 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import { Dispatch } from "redux";
+import { LoadingStateChange } from "@ireal-text-editor/redux-actions/appStateActions";
 
 export interface Document<T> {
   body: T;
@@ -9,7 +11,8 @@ export interface DocumentWithId<T> extends Document<T> {
   id: string;
 }
 
-export function fb<T>() {
+export function fb<T>(dispatch: Dispatch<any>) {
+  dispatch(LoadingStateChange(true));
   return {
     document: (path: string) => {
       return {
@@ -20,9 +23,11 @@ export function fb<T>() {
             .get()
             .then(d => {
               success(d.data() as T);
+              dispatch(LoadingStateChange(false));
             })
             .catch(() => {
               error();
+              dispatch(LoadingStateChange(false));
             });
         }
       };
@@ -40,9 +45,11 @@ export function fb<T>() {
                 collection.push(doc.data() as T);
               });
               success(collection);
+              dispatch(LoadingStateChange(false));
             })
             .catch(() => {
               error();
+              dispatch(LoadingStateChange(false));
             });
         },
 
@@ -63,9 +70,11 @@ export function fb<T>() {
             .set(body)
             .then(function() {
               success();
+              dispatch(LoadingStateChange(false));
             })
             .catch(() => {
               error();
+              dispatch(LoadingStateChange(false));
             });
         }
       };

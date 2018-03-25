@@ -3,11 +3,12 @@ import { AuthPanel } from "./AuthPanel";
 import { AnonPanel } from "./AnonPanel";
 
 import { AuthState, RootState } from "@ireal-text-editor/models";
-import { UserLogin, UserLogout } from "@ireal-text-editor/redux-actions";
+import { UserLogin, UserLogout } from "@ireal-text-editor/redux-actions/authActions";
 
 import { connect, DispatchProp } from "react-redux";
 import * as firebase from "firebase";
 import { NotificationContainer } from "../appComponents/notification/notificationContainer";
+import { ProgressIndicatorContainer } from "../appComponents/ProgressIndicator/ProgressIndicatorContainer";
 
 interface PanelState extends AuthState {}
 interface PanelProps extends AuthState {}
@@ -60,6 +61,7 @@ const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
 }) => {
   return (
     <div>
+      <ProgressIndicatorContainer />
       <Panel
         userInfo={userInfo}
         isAuthorized={isAuthorized}

@@ -122,7 +122,7 @@ export const saveSongAsync = (songData: SongData) => (
   }
   dispatch(GetSongSaveRequest(songData));
 
-  fb<SongData>()
+  fb<SongData>(dispatch)
     .collection(`users/${userId}/chords`)
     .put(
       { body: songData, id: songData.id },
@@ -163,7 +163,7 @@ export function fetchSongAsync(songId: string) {
     dispatch(GetFetchSongRequest(userId, songId));
     if (songId) {
       let path = `users/${userId}/chords/${songId}`;
-      fb<SongData>()
+      fb<SongData>(dispatch)
         .document(path)
         .get(
           result => {
@@ -187,7 +187,7 @@ export const fetchSongsAsync = () => (
   }
 
   dispatch(GetSongListRequest(userId));
-  fb<SongData>()
+  fb<SongData>(dispatch)
     .collection(`users/${userId}/chords`)
     .get(
       result => {

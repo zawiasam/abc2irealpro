@@ -1,5 +1,5 @@
 import { SongData } from "@ireal-text-editor/models";
-import { SongActions } from "@ireal-text-editor/redux-actions";
+import { SongActions } from "@ireal-text-editor/redux-actions/songActions";
 
 export function SongListReducer(
   state: SongData[] = [],

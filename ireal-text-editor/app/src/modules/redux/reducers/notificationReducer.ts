@@ -1,5 +1,5 @@
 import { NotificationModel } from "@ireal-text-editor/models";
-import { NotificationActions } from "@ireal-text-editor/redux-actions";
+import { NotificationActions } from "@ireal-text-editor/redux-actions/notificationActions";
 
 export function NotificationReducer(
   state: NotificationModel = { autoclose: true, message: undefined, type: 'failure' },

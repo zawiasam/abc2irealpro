@@ -6,7 +6,7 @@ import {
   saveSongAsync,
   fetchSongAsync,
   SongClear
-} from "@ireal-text-editor/redux-actions";
+} from "@ireal-text-editor/redux-actions/songActions";
 import { DispatchProp, connect, Dispatch } from "react-redux";
 import { RouteComponentProps } from "react-router";
 

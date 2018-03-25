@@ -5,7 +5,7 @@ import { RootState } from "@ireal-text-editor/models";
 import {
   GetSongListRequest,
   fetchSongsAsync
-} from "@ireal-text-editor/redux-actions";
+} from "@ireal-text-editor/redux-actions/songActions";
 import { connect, DispatchProp } from "react-redux";
 import { Dispatch } from "redux";
 
