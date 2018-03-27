@@ -30,4 +30,4 @@ const SongListContainer = connect(mapStateToProps, mapDispatchToProps)(
   SongList
 );
 
-export { SongListContainer as SongList };
+export { SongListContainer };

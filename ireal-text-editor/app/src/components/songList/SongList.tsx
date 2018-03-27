@@ -42,6 +42,7 @@ class SongList extends React.Component<SongListProps> {
       return <Redirect to={navigate} push={true} />;
     }
 
+    if (!songs) return  null;
     const songsCount = songs.length;
     return (
       <div>

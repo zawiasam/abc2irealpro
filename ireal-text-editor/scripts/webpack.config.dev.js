@@ -32,6 +32,8 @@ const config = Object.assign({}, configCommon.config, {
           if (req.headers.accept.indexOf("html") !== -1) {
             return "/index.html";
           }
+
+          return `/${path.basename(req.url)}`;
         }
       },
       historyApiFallback: true,

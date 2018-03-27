@@ -11,6 +11,10 @@ export interface DocumentWithId<T> extends Document<T> {
   id: string;
 }
 
+export function fbInit(userChanged: (user: firebase.User | null) => void) {
+  firebase.auth().onAuthStateChanged(userChanged);
+}
+
 export function fb<T>(dispatch: Dispatch<any>) {
   dispatch(LoadingStateChange(true));
   return {

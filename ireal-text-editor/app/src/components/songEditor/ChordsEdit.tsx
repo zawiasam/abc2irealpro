@@ -99,7 +99,6 @@ class ChordEditBox extends React.Component<
             label="Chords"
             multiline
             rows="4"
-            defaultValue={this.props.song}
             margin="normal"
             onChange={this.handleChange}
             fullWidth={true}

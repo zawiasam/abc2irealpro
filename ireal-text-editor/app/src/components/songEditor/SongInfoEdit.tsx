@@ -77,7 +77,6 @@ class SongInfoComponent extends React.Component<
       <div style={{ display: "block" }}>
         <TextField
           className={classes.textField}
-          defaultValue={this.props.defaultValue.composer}
           value={defaultValue.composer}
           fullWidth={true}
           label="Composer"

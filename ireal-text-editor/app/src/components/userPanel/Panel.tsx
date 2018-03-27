@@ -1,40 +1,38 @@
 import * as React from "react";
 import { AuthPanel } from "./AuthPanel";
 import { AnonPanel } from "./AnonPanel";
-
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { AuthState, RootState } from "@ireal-text-editor/models";
-import { UserLogin, UserLogout } from "@ireal-text-editor/redux-actions/authActions";
+import {
+  UserLogin,
+  UserLogout,
+  AttachOnAuthStateChanged
+} from "@ireal-text-editor/redux-actions/authActions";
 
-import { connect, DispatchProp } from "react-redux";
+import { connect, DispatchProp, Dispatch } from "react-redux";
 import * as firebase from "firebase";
 import { NotificationContainer } from "../appComponents/notification/notificationContainer";
 import { ProgressIndicatorContainer } from "../appComponents/ProgressIndicator/ProgressIndicatorContainer";
+import { Route } from "react-router";
+import { SongEditorContainer } from "../songEditor/SongEditorContainer";
+import { SongListContainer } from "../songList";
 
 interface PanelState extends AuthState {}
-interface PanelProps extends AuthState {}
+interface PanelProps extends AuthState {
+  authorizedContent: React.ReactNode;
+  onAuthStateChanged: () => void;
+}
+interface PanelContainerProps extends AuthState {
+  onAuthStateChanged: () => void;
+}
 
-class Panel extends React.Component<PanelProps & DispatchProp<any>> {
+class Panel extends React.Component<PanelProps> {
   constructor(props: PanelProps) {
     super(props);
-
-    let thisComponent = this;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        if (thisComponent.props.dispatch)
-          thisComponent.props.dispatch(
-            UserLogin({
-              userInfo: user,
-              isAuthorized: !user.isAnonymous
-            })
-          );
-      } else {
-        if (thisComponent.props.dispatch) {
-          thisComponent.props.dispatch(UserLogout());
-        }
-      }
-    });
   }
-
+  componentDidMount() {
+    this.props.onAuthStateChanged();
+  }
   render() {
     const user = this.props.userInfo
       ? {
@@ -46,7 +44,10 @@ class Panel extends React.Component<PanelProps & DispatchProp<any>> {
 
     return this.props.isAuthorized != null ? (
       this.props.isAuthorized && user ? (
-        <AuthPanel displayName={user.displayName} photoURL={user.photoURL} />
+        <>
+          <AuthPanel displayName={user.displayName} photoURL={user.photoURL} />
+          {this.props.authorizedContent}
+        </>
       ) : (
         <AnonPanel />
       )
@@ -54,10 +55,10 @@ class Panel extends React.Component<PanelProps & DispatchProp<any>> {
   }
 }
 
-const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
+const PanelContainer: React.SFC<PanelContainerProps> = ({
   userInfo,
   isAuthorized,
-  dispatch
+  onAuthStateChanged
 }) => {
   return (
     <div>
@@ -65,7 +66,13 @@ const PanelContainer: React.SFC<PanelProps & DispatchProp<any>> = ({
       <Panel
         userInfo={userInfo}
         isAuthorized={isAuthorized}
-        dispatch={dispatch}
+        authorizedContent={
+          <Switch>
+            <Route path="/editor/:id?" component={SongEditorContainer} />
+            <Route exact path="/songList" component={SongListContainer} />
+          </Switch>
+        }
+        onAuthStateChanged={onAuthStateChanged}
       />
       <NotificationContainer />
     </div>
@@ -79,8 +86,12 @@ function mapStateToProps(state: RootState, ownProps: PanelProps) {
   };
 }
 
-function mapDispatchToProps() {}
+function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    onAuthStateChanged: () => dispatch(AttachOnAuthStateChanged())
+  };
+}
 
-let panel = connect(mapStateToProps)(PanelContainer);
+let panel = connect(mapStateToProps, mapDispatchToProps)(PanelContainer);
 
 export { panel as Panel };

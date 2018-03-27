@@ -11,7 +11,6 @@ import appConfig from "app-config";
 import { IrealLinkGenerator } from "./components/songEditor/IrealLinkGenerator";
 import { SongEditorContainer } from "./components/songEditor/SongEditorContainer";
 import { Panel } from "./components/userPanel/Panel";
-import { SongList } from "./components/songList";
 import { configureStore } from "@ireal-text-editor/redux-store";
 
 export const store = configureStore({});
@@ -27,9 +26,7 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          <Panel />
-          <Route path="/editor/:id?" component={SongEditorContainer} />
-          <Route exact path="/songList" component={SongList} />
+          <Route path="/" component={Panel} />
         </div>
       </Router>
     );
