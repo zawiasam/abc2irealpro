@@ -1,4 +1,7 @@
+import appConfig from "app-config";
+
 import * as firebase from "firebase/app";
+import "firebase/auth";
 import "firebase/firestore";
 import { Dispatch } from "redux";
 import { LoadingStateChange } from "@ireal-text-editor/redux-actions/appStateActions";
@@ -12,6 +15,7 @@ export interface DocumentWithId<T> extends Document<T> {
 }
 
 export function fbInit(userChanged: (user: firebase.User | null) => void) {
+  firebase.initializeApp(appConfig);  
   firebase.auth().onAuthStateChanged(userChanged);
 }
 

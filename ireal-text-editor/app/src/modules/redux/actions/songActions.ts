@@ -2,9 +2,6 @@ import { Action, Dispatch } from "redux";
 import { UserInfo, SongData, RootState } from "@ireal-text-editor/models";
 import { uuidv4 } from "@ireal-text-editor/lib";
 
-import * as firebase from "firebase/app";
-import "firebase/firestore";
-
 import {
   ShowNotificationCreate,
   GeneralFailNotificationCreate
