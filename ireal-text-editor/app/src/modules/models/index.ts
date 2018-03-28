@@ -5,7 +5,35 @@ export interface AuthState {
   isAuthorized: boolean | null;
 }
 
-export interface RootState {
-  authState: AuthState;
+export type NotificationType = "success" | "failure" | "warning";
+
+export interface NotificationModel {
+  message: string | undefined;
+  type: NotificationType;
+  autoclose: boolean;
 }
+
+export interface AppState {
+  loading: boolean;
+}
+
+export interface RootState {
+  appState: AppState;
+  authState: AuthState;
+  songList: SongData[];
+  notification: NotificationModel;
+  selectedSong: SongData;
+}
+
+export interface SongData {
+  title: string;
+  composer: string;
+  style: string;
+  keySignature: string;
+  transpostion: string;
+  measure: string;
+  song: string;
+  id: string;
+}
+
 export { UserInfo };

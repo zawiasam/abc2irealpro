@@ -1,5 +1,6 @@
 import * as React from "react";
 import { AuthProfileMenu } from "./ProfileMenu/AuthProfileMenu";
+import { AuthMenu } from "./ActionMenu/AuthMenu";
 
 const panelElementStyle = { paddingRight: "8px" };
 
@@ -16,8 +17,10 @@ class AuthPanel extends React.Component<AuthPanelProps> {
   render() {
     return (
       <div style={{ display: "flex" }}>
+        <AuthMenu />
+        <div style={{ flexGrow: 1 }} />
         <div style={panelElementStyle}>
-          Welcome back
+          Nice to see you
           <br />
           {this.props.displayName || ""}
         </div>

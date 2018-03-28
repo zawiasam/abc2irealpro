@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const appSrcRoot = path.resolve(__dirname, "..");
 
@@ -26,13 +27,13 @@ function getConfigCommon(_env_) {
     module: {
       loaders: [
         {
-          test: /\.jsx?/,
+          test: /\.jsx?$/,
           include: paths.appJsSrc,
           loader: "babel-loader",
           exclude: /node_modules/
         },
         {
-          test: /\.tsx?/,
+          test: /\.tsx?$/,
           include: paths.appJsSrc,
           loader: "babel-loader!ts-loader",
           exclude: /node_modules/
@@ -45,7 +46,14 @@ function getConfigCommon(_env_) {
             publicPath: paths.appAssets,
             useRelativePath: true
           }
-        }
+        },
+        {
+          test: /\.css/,
+          use: ExtractTextPlugin.extract({
+                use: 'css-loader?modules',
+                fallback: 'style-loader'
+          })
+         },
       ]
     },
     resolve: {
@@ -64,7 +72,8 @@ function getConfigCommon(_env_) {
       new CleanWebpackPlugin([paths.appJsBuild], {
         allowExternal: true,
         verbose: true
-      })
+      }),
+      new ExtractTextPlugin("[name]-[hash:8].css")
     ]
   };
   return { config, paths };

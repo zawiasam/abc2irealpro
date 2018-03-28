@@ -1,9 +1,16 @@
 import { combineReducers } from "redux";
 import { AuthReducer } from "./authReducer";
+import { SongListReducer } from "./songListReducer";
+import { NotificationReducer } from "./notificationReducer";
+import { SongReducer } from "./songReducer";
+import { AppStateReducer } from "./appStateReducer";
 
 const rootReducer = combineReducers({
-  authState: AuthReducer
+  appState: AppStateReducer,
+  authState: AuthReducer,
+  songList: SongListReducer,
+  notification: NotificationReducer,
+  selectedSong: SongReducer
 });
 
-
-export default rootReducer
+export default rootReducer;

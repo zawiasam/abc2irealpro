@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RaisedButton } from "material-ui";
+import Button  from "material-ui/Button";
 import * as firebase from 'firebase';
 
 interface ProfileMenuAuthProps {
@@ -21,7 +21,7 @@ class AuthProfileMenu extends React.Component<ProfileMenuAuthProps> {
           />
         </div>
         <div>
-          <RaisedButton label="Logout" onClick={this.logoutHandle} />
+          <Button variant='raised' onClick={this.logoutHandle} >Logout</Button>
         </div>
       </div>
     );

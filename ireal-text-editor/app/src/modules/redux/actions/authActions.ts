@@ -1,6 +1,7 @@
-import { Action } from "redux";
-import { UserInfo } from "@ireal-text-editor/models";
-import face from "material-ui/svg-icons/action/face";
+import { Action, Dispatch } from "redux";
+import { UserInfo, RootState } from "@ireal-text-editor/models";
+import { fbInit } from "../firebaseRequest";
+import { LoadingStateChange } from "@ireal-text-editor/redux-actions/appStateActions";
 
 interface LoginRequest {
   userInfo: UserInfo;
@@ -21,7 +22,10 @@ interface LogoutAction extends Action {
   logoutRequest: LogoutRequest;
 }
 
-type AuthActions = LoginAction | LogoutAction;
+interface OnAuthStateChanged extends Action {
+  type: "@APP/AUTHSTATE/CHANGED/ATTACH";
+}
+type AuthActions = LoginAction | LogoutAction | OnAuthStateChanged;
 
 function UserLogin(loginRequest: LoginRequest): LoginAction {
   return {
@@ -37,4 +41,28 @@ function UserLogout(): LogoutAction {
   };
 }
 
-export { UserLogin, UserLogout, AuthActions };
+// function AttachOnAuthStateChanged(): OnAuthStateChanged {
+//   return {
+//     type: "@APP/AUTHSTATE/CHANGED/ATTACH"
+//   };
+// }
+
+function AttachOnAuthStateChanged() {
+  return (dispatch: Dispatch<any>, getState: () => RootState) => {
+    dispatch(LoadingStateChange(true));
+    fbInit(user => {
+      if (user) {
+        dispatch(
+          UserLogin({
+            userInfo: user,
+            isAuthorized: !user.isAnonymous
+          })
+        );
+      } else {
+        dispatch(UserLogout());
+      }
+      dispatch(LoadingStateChange(false));
+    });
+  };
+}
+export { UserLogin, UserLogout, AttachOnAuthStateChanged, AuthActions };
