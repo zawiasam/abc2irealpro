@@ -10,7 +10,6 @@ import {
 } from "@ireal-text-editor/redux-actions/authActions";
 
 import { connect, DispatchProp, Dispatch } from "react-redux";
-import * as firebase from "firebase";
 import { NotificationContainer } from "../appComponents/notification/notificationContainer";
 import { ProgressIndicatorContainer } from "../appComponents/ProgressIndicator/ProgressIndicatorContainer";
 import { Route } from "react-router";

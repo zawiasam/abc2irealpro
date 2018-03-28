@@ -9,7 +9,10 @@ const config = Object.assign({}, configCommon.config, {
   externals: {
     react: "React",
     "react-dom": "ReactDOM",
-    firebase: "firebase"
+    firebase: "firebase",
+    "firebase/app": "firebase",
+    "firebase/auth": "firebase",
+    "firebase/firestore": "firebase"
   },
 
   plugins: [].concat(configCommon.config.plugins, [
