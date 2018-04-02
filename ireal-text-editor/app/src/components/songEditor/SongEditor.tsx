@@ -35,6 +35,30 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
     }
   }
 
+  encodeLink = (songInfo: SongData) => {
+    let header = [
+      songInfo.title,
+      songInfo.composer,
+      songInfo.style,
+      songInfo.keySignature,
+      songInfo.transpostion,
+      `[T${songInfo.measure.replace("/", "")}`
+    ].join("=");
+
+    let body =
+      (songInfo.song || "")
+        .replace(/\./g, " ")
+        .replace(/\|+$/, "")
+        .replace(/\n/g, "")
+        .replace(/\r/g, "") + "Z ";
+
+    if (songInfo.song.length > 0) {
+      return "irealbook://" + encodeURIComponent(header + body);
+    } else {
+      return "";
+    }
+  };
+
   componentWillReceiveProps(nextProps: SongEditorProps) {
     if (nextProps.defaultValue !== this.props.defaultValue) {
       this.setState( { ...nextProps.defaultValue });
@@ -48,9 +72,8 @@ class SongEditor extends React.Component<SongEditorProps, SongEditorState> {
   }
 
   handleSongChange(text: string) {
-    if (this.props.onChange) {
-      this.props.onChange({ ...this.state, song: text });
-    }
+    const url = this.encodeLink({...this.state, song: text});
+    url && window.open(url, "_blank");
   }
 
   handleSongSave = (text: string) => {
