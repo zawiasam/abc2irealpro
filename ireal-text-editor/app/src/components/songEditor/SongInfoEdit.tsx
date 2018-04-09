@@ -90,9 +90,9 @@ class SongInfoComponent extends React.Component<
           value={defaultValue.title}
           fullWidth={true}
           label="Title"
-          // onChange={event => {
-          //   this.doChanged({ title: event.currentTarget.value });
-          // }}
+          onChange={event => {
+            this.doChanged({ title: event.currentTarget.value });
+          }}
         />
         <br />
         <TextField
@@ -114,6 +114,9 @@ class SongInfoComponent extends React.Component<
           value={defaultValue.keySignature}
           fullWidth={true}
           label="Key"
+          onChange={event => {
+            this.doChanged({ keySignature: event.currentTarget.value });
+          }}
         />
       </div>
     );

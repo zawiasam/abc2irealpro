@@ -58,7 +58,7 @@ class SongList extends React.Component<SongListProps> {
                       this.navigeteTo(`/editor/${song.id}`);
                     }}
                   >
-                    <ListItemText primary={song.title} />
+                    <ListItemText primary={`${song.title}`} secondary={`${song.composer}`} />
                   </ListItem>
                   {index !== songsCount - 1 ? <Divider />: <></>}
                 </>
